@@ -1,8 +1,8 @@
 import { Platform, RegionId } from "@/lib/config/regions";
 
 const API_KEY = process.env.RIOT_API_KEY;
-const BASE_URL = "https://{region}.api.riotgames.com";
-const PROXY_BASE_URL = "http://localhost:3001/api"; // Proxy server URL
+
+const BASE_URL = process.env.BASE_URL; // Proxy server URL
 
 class RateLimiter {
   private queue: Array<() => Promise<any>> = [];
@@ -84,22 +84,22 @@ export async function getAccountByRiotID(
   gameName: string,
   tagLine: string
 ) {
-  const url = `${PROXY_BASE_URL}/account/${platform}/${gameName}/${tagLine}`;
+  const url = `${BASE_URL}/account/${platform}/${gameName}/${tagLine}`;
   return fetchWithRateLimit(url);
 }
 
 export async function getSummonerByPUUID(region: RegionId, puuid: string) {
-  const url = `${PROXY_BASE_URL}/summoner/${region}/${puuid}`;
+  const url = `${BASE_URL}/summoner/${region}/${puuid}`;
   return fetchWithRateLimit(url);
 }
 
 export async function getRankedInfo(region: RegionId, summonerId: string) {
-  const url = `${PROXY_BASE_URL}/ranked/${region}/${summonerId}`;
+  const url = `${BASE_URL}/ranked/${region}/${summonerId}`;
   return fetchWithRateLimit(url);
 }
 
 export async function getCurrentGame(region: RegionId, puuid: string) {
-  const url = `${PROXY_BASE_URL}/spectator/active-games/by-summoner/${region}/${puuid}`;
+  const url = `${BASE_URL}/spectator/active-games/by-summoner/${region}/${puuid}`;
   return fetchWithRateLimit(url);
 }
 
@@ -109,19 +109,19 @@ export async function getMatchList(
   start = 0,
   count = 20
 ) {
-  const url = `${PROXY_BASE_URL}/matches/${platform}/${puuid}?start=${start}&count=${count}`;
+  const url = `${BASE_URL}/matches/${platform}/${puuid}?start=${start}&count=${count}`;
 
   return fetchWithRateLimit(url);
 }
 
 export async function getMatchDetails(platform: Platform, matchId: string) {
-  const url = `${PROXY_BASE_URL}/match/${platform}/${matchId}`;
+  const url = `${BASE_URL}/match/${platform}/${matchId}`;
 
   return fetchWithRateLimit(url);
 }
 
 export async function getChampionNameById(championId: number) {
-  const url = `${PROXY_BASE_URL}/champion/${championId}`;
+  const url = `${BASE_URL}/champion/${championId}`;
 
   const response = await fetch(url, {
     headers: {

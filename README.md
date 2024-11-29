@@ -21,11 +21,12 @@ Welcome to the Lolchi web application! This tool allows you to track your game s
    ```bash
    npm install
    ```
-4. Start the API server:
+4. Change '.env.example' to '.env' and fill the API KEY
+5. Start the API server:
    ```bash
    node server.js
    ```
-5. Start the application:
+6. Start the application:
    ```bash
    npm run dev
    ```

@@ -2,7 +2,7 @@ import { Platform, RegionId } from "@/lib/config/regions";
 
 const API_KEY = process.env.RIOT_API_KEY;
 
-const BASE_URL = process.env.BASE_URL; // Proxy server URL
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL; // Proxy server URL
 
 class RateLimiter {
   private queue: Array<() => Promise<any>> = [];

@@ -10,12 +10,12 @@ import { MatchHistory } from "./MatchHistory";
 import { Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { regions } from "@/lib/config/regions";
+import { RegionId, regions } from "@/lib/config/regions";
 
 export default async function SummonerPage({
   params,
 }: {
-  params: { region: string; summonerName: string; tagLine: string };
+  params: { region: RegionId; summonerName: string; tagLine: string };
 }) {
   try {
     const regionConfig = regions.find((r) => r.id === params.region);
@@ -72,6 +72,7 @@ export default async function SummonerPage({
       </div>
     );
   } catch (error) {
-    notFound();
+    console.error(error);
+    return notFound();
   }
 }

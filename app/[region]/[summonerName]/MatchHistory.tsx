@@ -27,26 +27,24 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ranks, setRanks] = useState<{ [key: string]: string }>({});
 
-  useEffect(() => {
-    async function fetchMatches() {
-      try {
-        const regionConfig = regions.find((r) => r.id === region);
-        if (!regionConfig) return;
+  const fetchMatches = async () => {
+    try {
+      const regionConfig = regions.find((r) => r.id === region);
+      if (!regionConfig) return;
 
-        const matchIds = await getMatchList(regionConfig.platform, summonerId);
-        const matchDetails: Match[] = await Promise.all(
-          matchIds
-            .slice(0, 10)
-            .map((id: string) => getMatchDetails(regionConfig.platform, id))
-        );
-        setMatches(matchDetails);
-      } catch (error) {
-        console.error("Error fetching matches:", error);
-      } finally {
-        setLoading(false);
-      }
+      const matchIds = await getMatchList(regionConfig.platform, summonerId);
+      const matchDetails: Match[] = await Promise.all(
+        matchIds.slice(0, 10).map((id: string) => getMatchDetails(regionConfig.platform, id))
+      );
+      setMatches(matchDetails);
+    } catch (error) {
+      console.error("Error fetching matches:", error);
+    } finally {
+      setLoading(false);
     }
+  };
 
+  useEffect(() => {
     fetchMatches();
   }, [summonerId]);
 
@@ -54,28 +52,28 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
     if (selectedMatch) {
       const fetchRanks = async () => {
         try {
+          const participantIds = selectedMatch.info.participants.map(
+            (participant) => participant.summonerId
+          );
+          const rankInfos = await Promise.all(
+            participantIds.map((id) => getRankedInfo(region, id))
+          );
+
           const ranks: { [key: string]: string } = {};
-          for (const participant of selectedMatch.info.participants) {
-            const rankInfo = await getRankedInfo(
-              region,
-              participant.summonerId
-            );
+          const queueId = selectedMatch.info.queueId;
+          const rankType = queueId === 440 ? "RANKED_FLEX_SR" : "RANKED_SOLO_5x5";
+          participantIds.forEach((id, index) => {
+            const rankInfo = rankInfos[index];
             if (rankInfo.length > 0) {
-              const soloRank = rankInfo.find(
-                (rank: { queueType: string }) =>
-                  rank.queueType === "RANKED_SOLO_5x5"
+              const selectedRank = rankInfo.find(
+                (rank: { queueType: string }) => rank.queueType === rankType
               );
-              if (soloRank) {
-                ranks[
-                  participant.summonerId
-                ] = `${soloRank.tier} ${soloRank.rank}`;
-              } else {
-                ranks[participant.summonerId] = "Unranked";
-              }
+              ranks[id] = selectedRank ? `${selectedRank.tier} ${selectedRank.rank}` : "Unranked";
             } else {
-              ranks[participant.summonerId] = "Unranked";
+              ranks[id] = "Unranked";
             }
-          }
+          });
+
           setRanks(ranks);
         } catch (error) {
           console.error("Error fetching ranks:", error);
@@ -127,13 +125,12 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
     "450": "ARAM",
   };
 
-  if (loading) {
-    return <div>Loading matches...</div>;
-  }
+  const loadingIndicator = loading ? <div>Loading matches...</div> : null;
 
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold mb-4">Match History</h2>
+      {loadingIndicator}
       {matches.map((match) => (
         <div
           key={match.metadata.matchId}

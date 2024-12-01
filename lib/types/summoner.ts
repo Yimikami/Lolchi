@@ -37,7 +37,7 @@ export interface MatchParticipant {
   teamId: number;
   puuid: string;
   summonerName: string;
-  championName: number;
+  championName: string;
   champLevel: number;
   kills: number;
   deaths: number;

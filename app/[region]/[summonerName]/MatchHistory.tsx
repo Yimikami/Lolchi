@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Match } from "@/lib/types/summoner";
 import { Card } from "@/components/ui/card";
-import { getMatchList, getMatchDetails } from "@/lib/api/riot";
+import { getMatchList, getMatchDetails, getRankedInfo } from "@/lib/api/riot";
 import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { RegionId, regions } from "@/lib/config/regions";
@@ -24,6 +24,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
   const [loading, setLoading] = useState(true);
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [ranks, setRanks] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     async function fetchMatches() {
@@ -48,6 +49,43 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
     fetchMatches();
   }, [summonerId]);
 
+  useEffect(() => {
+    if (selectedMatch) {
+      const fetchRanks = async () => {
+        try {
+          const ranks: { [key: string]: string } = {};
+          for (const participant of selectedMatch.info.participants) {
+            const rankInfo = await getRankedInfo(
+              region,
+              participant.summonerId
+            );
+            if (rankInfo.length > 0) {
+              const soloRank = rankInfo.find(
+                (rank: { queueType: string }) =>
+                  rank.queueType === "RANKED_SOLO_5x5"
+              );
+              if (soloRank) {
+                ranks[
+                  participant.summonerId
+                ] = `${soloRank.tier} ${soloRank.rank}`;
+              } else {
+                ranks[participant.summonerId] = "Unranked";
+              }
+            } else {
+              ranks[participant.summonerId] = "Unranked";
+            }
+          }
+          setRanks(ranks);
+        } catch (error) {
+          console.error("Error fetching ranks:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchRanks();
+    }
+  }, [selectedMatch]);
+
   const handleMatchClick = (match: Match) => {
     setSelectedMatch(match);
     setIsModalOpen(true);
@@ -56,6 +94,28 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedMatch(null);
+  };
+
+  const summonerSpells: { [key: number]: string } = {
+    1: "SummonerBoost",
+    3: "SummonerExhaust",
+    4: "SummonerFlash",
+    6: "SummonerHaste",
+    7: "SummonerHeal",
+    11: "SummonerSmite",
+    12: "SummonerTeleport",
+    13: "SummonerMana",
+    14: "SummonerDot",
+    21: "SummonerBarrier",
+    22: "SummonerAssist",
+    30: "SummonerPoroRecall",
+    31: "SummonerPoroThrow",
+    32: "SummonerSnowball",
+    39: "SummonerSnowURFSnowball_Mark",
+    54: "Summoner_UltBookPlaceholder",
+    55: "Summoner_UltBookSmitePlaceholder",
+    2201: "SummonerCherryHold",
+    2202: "SummonerCherryFlash",
   };
 
   if (loading) {
@@ -81,10 +141,10 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
               <DialogTitle>Match Details</DialogTitle>
             </DialogHeader>
             <div>
-              <div className="flex">
+              <div className="flex justify-between">
                 <div className="w-1/2 pr-2">
-                  <h4
-                    className={`text-lg font-bold mb-2 ${
+                  <h3
+                    className={`text-lg font-bold ${
                       selectedMatch.info.participants.some(
                         (participant) =>
                           participant.teamId === 100 && participant.win
@@ -99,33 +159,59 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                     )
                       ? "Victory"
                       : "Defeat"}
-                  </h4>
+                  </h3>
                   {selectedMatch.info.participants
                     .filter((participant) => participant.teamId === 100)
                     .map((participant) => (
                       <div
                         key={participant.puuid}
-                        className="flex items-center mb-4 p-2 border rounded-md bg-gray-100"
+                        className="flex items-center mb-2"
                       >
-                        <Image
-                          src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/${participant.championName}.png`}
-                          alt={participant.championName}
-                          width={48}
-                          height={48}
-                          className="mr-2"
-                        />
-                        <div className="flex-1">
+                        <div className="relative">
+                          <Image
+                            src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/${participant.championName}.png`}
+                            alt={participant.championName}
+                            width={48}
+                            height={48}
+                            className="rounded-full"
+                          />
+                          <span className="absolute top-0 left-0 bg-black text-white text-xs font-bold rounded-full px-1">
+                            {participant.champLevel}
+                          </span>
+                          <div className="flex justify-center mt-1">
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/spell/${
+                                summonerSpells[participant.summoner1Id]
+                              }.png`}
+                              alt={summonerSpells[participant.summoner1Id]}
+                              width={16}
+                              height={16}
+                              className="mr-1"
+                            />
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/spell/${
+                                summonerSpells[participant.summoner2Id]
+                              }.png`}
+                              alt={summonerSpells[participant.summoner2Id]}
+                              width={16}
+                              height={16}
+                            />
+                          </div>
+                        </div>
+                        <div className="ml-2">
+                          <p className="text-xs text-gray-500">
+                            {ranks[participant.summonerId]}
+                          </p>
                           <p className="font-bold">
                             {participant.riotIdGameName}#
                             {participant.riotIdTagline}
                           </p>
-                          <p>
-                            KDA: {participant.kills}/{participant.deaths}/
+                          <p className="text-sm">
+                            {participant.kills}/{participant.deaths}/
                             {participant.assists}
                           </p>
-                          <p>CS: {participant.totalMinionsKilled}</p>
                         </div>
-                        <div className="flex space-x-1">
+                        <div className="flex ml-auto space-x-1">
                           {[
                             participant.item0,
                             participant.item1,
@@ -141,8 +227,8 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                                 key={index}
                                 src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/${itemId}.png`}
                                 alt={`Item ${index + 1}`}
-                                width={32}
-                                height={32}
+                                width={24}
+                                height={24}
                               />
                             ))}
                         </div>
@@ -150,8 +236,8 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                     ))}
                 </div>
                 <div className="w-1/2 pl-2">
-                  <h4
-                    className={`text-lg font-bold mb-2 ${
+                  <h3
+                    className={`text-lg font-bold ${
                       selectedMatch.info.participants.some(
                         (participant) =>
                           participant.teamId === 200 && participant.win
@@ -166,33 +252,59 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                     )
                       ? "Victory"
                       : "Defeat"}
-                  </h4>
+                  </h3>
                   {selectedMatch.info.participants
                     .filter((participant) => participant.teamId === 200)
                     .map((participant) => (
                       <div
                         key={participant.puuid}
-                        className="flex items-center mb-4 p-2 border rounded-md bg-gray-100"
+                        className="flex items-center mb-2"
                       >
-                        <Image
-                          src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/${participant.championName}.png`}
-                          alt={participant.championName}
-                          width={48}
-                          height={48}
-                          className="mr-2"
-                        />
-                        <div className="flex-1">
+                        <div className="relative">
+                          <Image
+                            src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/${participant.championName}.png`}
+                            alt={participant.championName}
+                            width={48}
+                            height={48}
+                            className="rounded-full"
+                          />
+                          <span className="absolute top-0 left-0 bg-black text-white text-xs font-bold rounded-full px-1">
+                            {participant.champLevel}
+                          </span>
+                          <div className="flex justify-center mt-1">
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/spell/${
+                                summonerSpells[participant.summoner1Id]
+                              }.png`}
+                              alt={summonerSpells[participant.summoner1Id]}
+                              width={16}
+                              height={16}
+                              className="mr-1"
+                            />
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/spell/${
+                                summonerSpells[participant.summoner2Id]
+                              }.png`}
+                              alt={summonerSpells[participant.summoner2Id]}
+                              width={16}
+                              height={16}
+                            />
+                          </div>
+                        </div>
+                        <div className="ml-2">
+                          <p className="text-xs text-gray-500">
+                            {ranks[participant.summonerId]}
+                          </p>
                           <p className="font-bold">
                             {participant.riotIdGameName}#
                             {participant.riotIdTagline}
                           </p>
-                          <p>
-                            KDA: {participant.kills}/{participant.deaths}/
+                          <p className="text-sm">
+                            {participant.kills}/{participant.deaths}/
                             {participant.assists}
                           </p>
-                          <p>CS: {participant.totalMinionsKilled}</p>
                         </div>
-                        <div className="flex space-x-1">
+                        <div className="flex ml-auto space-x-1">
                           {[
                             participant.item0,
                             participant.item1,
@@ -208,8 +320,8 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                                 key={index}
                                 src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/${itemId}.png`}
                                 alt={`Item ${index + 1}`}
-                                width={32}
-                                height={32}
+                                width={24}
+                                height={24}
                               />
                             ))}
                         </div>

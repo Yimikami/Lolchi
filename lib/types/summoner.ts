@@ -32,6 +32,8 @@ export interface Match {
 }
 
 export interface MatchParticipant {
+  rank: string;
+  summonerId: string;
   riotIdGameName: string;
   riotIdTagline: string;
   teamId: number;
@@ -52,5 +54,7 @@ export interface MatchParticipant {
   item6: number;
   summoner1Id: number;
   summoner2Id: number;
+  primaryRuneId: number;
+  secondaryRuneId: number;
   win: boolean;
 }

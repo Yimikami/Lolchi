@@ -50,20 +50,3 @@ export async function getMatchDetails(platform: Platform, matchId: string) {
   const url = `${BASE_URL}/match/${platform}/${matchId}`;
   return fetchDirect(url);
 }
-
-export async function getChampionNameById(championId: number) {
-  try {
-    const url = `https://ddragon.leagueoflegends.com/cdn/14.23.1/data/en_US/champion.json`;
-    const response = await fetch(url);
-    const data = await response.json();
-    const champions = data.data;
-    for (const champion of Object.values(champions as Record<string, any>)) {
-      if (champion.key == championId.toString()) {
-        return { name: champion.id };
-      }
-    }
-    throw new Error("Champion not found");
-  } catch (error) {
-    throw new Error(`Error fetching champion name: ${error}`);
-  }
-}

@@ -54,6 +54,8 @@ We welcome contributions! Please follow these steps:
 
 With the introduction of `worker.js`, you can now deploy Lolchi on Cloudflare Workers without the need for a traditional server setup.
 
+[Credits to BangingHeads](https://hextechdocs.dev/using-cloudflare-workers-to-make-api-calls/)
+
 If you prefer not to use the Cloudflare Worker script, you can find the old `server.js` and `riot.ts` files in the `OLD_FILES` directory.
 
 ### Steps to Deploy

@@ -13,7 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Home } from "lucide-react";
 import Image from "next/image";
-import { getChampionNameById, getRankedInfo } from "@/lib/api/riot";
+import { getRankedInfo } from "@/lib/api/riot";
 import { RegionId } from "@/lib/config/regions";
 import Link from "next/link";
 
@@ -69,27 +69,8 @@ export default function LiveGamePage({
     };
   }>({});
   const [loading, setLoading] = useState(true);
-  const [championNames, setChampionNames] = useState<{ [key: number]: string }>(
-    {}
-  );
   const SummonerName = decodeURIComponent(summonerName).replace(/\+/g, "#");
   useEffect(() => {
-    const fetchChampionNames = async () => {
-      try {
-        for (const participant of gameData.participants) {
-          const championName = await getChampionNameById(
-            participant.championId
-          );
-          setChampionNames((prev) => ({
-            ...prev,
-            [participant.championId]: championName.name,
-          }));
-        }
-      } catch (error) {
-        console.error("Error fetching champion names:", error);
-      }
-    };
-    fetchChampionNames();
     const fetchRanks = async () => {
       try {
         const ranks: {
@@ -195,10 +176,8 @@ export default function LiveGamePage({
                     <TableCell>
                       <div className="flex items-center">
                         <Image
-                          src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/${
-                            championNames[participant.championId]
-                          }.png`}
-                          alt={`Champion ${championNames[participant.championId]}`}
+                          src={`https://cdn.communitydragon.org/14.23.1/champion/${participant.championId}/square`}
+                          alt={`Champion ${participant.championId}`}
                           width={48}
                           height={48}
                         />
@@ -255,10 +234,8 @@ export default function LiveGamePage({
                     <TableCell>
                       <div className="flex items-center">
                         <Image
-                          src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/${
-                            championNames[participant.championId]
-                          }.png`}
-                          alt={`Champion ${championNames[participant.championId]}`}
+                          src={`https://cdn.communitydragon.org/14.23.1/champion/${participant.championId}/square`}
+                          alt={`Champion ${participant.championId}`}
                           width={48}
                           height={48}
                         />

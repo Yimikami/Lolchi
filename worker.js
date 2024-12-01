@@ -1,11 +1,6 @@
 // Cloudflare Worker Script to make request to the Riot Games API
 // By: BangingHeads
 
-// Supports GET Requests
-// Supports Path and GET Parameters as GET Parameters
-// Example path: https://example.bangingheads.workers.dev/api/?region=na1&endpoint=/lol/summoner/v4/summoners/by-name/{summonerName}&summonerName=Headbang
-// Use Guide on Hextech Docs (https://hextechdocs.dev) if you need more help
-
 
 // Edited by Yimikami for Lolchi (https://github.com/Yimikami/lolchi)
 

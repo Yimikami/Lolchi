@@ -7,7 +7,7 @@ export default function Home() {
       <div className="text-center mb-12">
         <div className="flex items-center justify-center mb-4">
           <Gamepad className="h-12 w-12 text-primary mr-2" />
-          <h1 className="text-4xl font-bold">LoL Stats</h1>
+          <h1 className="text-4xl font-bold">Lolchi</h1>
         </div>
         <p className="text-muted-foreground">
           Track your League of Legends statistics and improve your game

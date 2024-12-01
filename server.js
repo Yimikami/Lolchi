@@ -160,6 +160,5 @@ app.get("/api/champion/:championId", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(RIOT_API_KEY);
   console.log(`Proxy server running at http://localhost:${port}`);
 });

@@ -32,6 +32,9 @@ export interface Match {
 }
 
 export interface MatchParticipant {
+  riotIdGameName: string;
+  riotIdTagline: string;
+  teamId: number;
   puuid: string;
   summonerName: string;
   championName: number;

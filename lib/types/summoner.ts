@@ -24,6 +24,7 @@ export interface Match {
     participants: string[];
   };
   info: {
+    queueId: number;
     gameCreation: number;
     gameDuration: number;
     gameMode: string;

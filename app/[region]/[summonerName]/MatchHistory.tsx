@@ -13,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import Link from "next/link";
 
 interface MatchHistoryProps {
   summonerId: string;
@@ -118,6 +119,14 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
     2202: "SummonerCherryFlash",
   };
 
+  const queueIds: { [key: number]: string } = {
+    "400": "Draft Pick",
+    "420": "Ranked Solo/Duo",
+    "430": "Blind Pick",
+    "440": "Ranked Flex",
+    "450": "ARAM",
+  };
+
   if (loading) {
     return <div>Loading matches...</div>;
   }
@@ -139,6 +148,15 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
           <DialogContent className="w-full max-w-6xl">
             <DialogHeader>
               <DialogTitle>Match Details</DialogTitle>
+              <div className="text-sm text-gray-500 mb-2">
+                Game Duration:{" "}
+                {Math.floor(selectedMatch.info.gameDuration / 60)}m{" "}
+                {selectedMatch.info.gameDuration % 60}s
+              </div>
+
+              <div className="text-sm text-gray-500">
+                {queueIds[selectedMatch.info.queueId] || "Unknown Queue"}
+              </div>
             </DialogHeader>
             <div>
               <div className="flex justify-between">
@@ -160,6 +178,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                       ? "Victory"
                       : "Defeat"}
                   </h3>
+
                   {selectedMatch.info.participants
                     .filter((participant) => participant.teamId === 100)
                     .map((participant) => (
@@ -202,10 +221,14 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                           <p className="text-xs text-gray-500">
                             {ranks[participant.summonerId]}
                           </p>
-                          <p className="font-bold">
-                            {participant.riotIdGameName}#
-                            {participant.riotIdTagline}
-                          </p>
+                          <Link
+                            href={`/${region}/${participant.riotIdGameName}+${participant.riotIdTagline}`}
+                          >
+                            <p className="font-bold">
+                              {participant.riotIdGameName}#
+                              {participant.riotIdTagline}
+                            </p>
+                          </Link>
                           <p className="text-sm">
                             {participant.kills}/{participant.deaths}/
                             {participant.assists}
@@ -295,10 +318,14 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                           <p className="text-xs text-gray-500">
                             {ranks[participant.summonerId]}
                           </p>
-                          <p className="font-bold">
-                            {participant.riotIdGameName}#
-                            {participant.riotIdTagline}
-                          </p>
+                          <Link
+                            href={`/${region}/${participant.riotIdGameName}+${participant.riotIdTagline}`}
+                          >
+                            <p className="font-bold">
+                              {participant.riotIdGameName}#
+                              {participant.riotIdTagline}
+                            </p>
+                          </Link>
                           <p className="text-sm">
                             {participant.kills}/{participant.deaths}/
                             {participant.assists}

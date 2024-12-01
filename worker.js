@@ -62,9 +62,6 @@ async function handleRequest(request) {
       case 'spectator':
         endpoint = `/lol/spectator/v5/active-games/by-summoner/${pathSegments[4]}`;
         break;
-      case 'champion':
-        endpoint = `/cdn/14.23.1/data/en_US/champion.json`;
-        break;
     }
   }
 
@@ -82,8 +79,6 @@ async function handleRequest(request) {
   // Construct the full URL with the region
   let fullUrl = `https://${region}.api.riotgames.com${endpoint}`;
 
-  // Log the full URL before making the request
-
 
   // Add leftover get parameters
   const getParams = {};
@@ -98,9 +93,9 @@ async function handleRequest(request) {
     fullUrl = `${fullUrl}?${reqParams}`;
   }
 
-  riotRequest = new Request(fullUrl, request);
+  const riotRequest = new Request(fullUrl, request);
   riotRequest.headers.set('X-Riot-Token', API_KEY);
-  response = await fetch(riotRequest, {
+  let response = await fetch(riotRequest, {
     cf: {
       cacheTtl: CACHE_TIME,
       cacheEverything: true,

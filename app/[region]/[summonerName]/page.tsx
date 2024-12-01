@@ -72,7 +72,6 @@ export default async function SummonerPage({
       </div>
     );
   } catch (error) {
-    console.error(error);
     return notFound();
   }
 }

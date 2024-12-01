@@ -10,7 +10,7 @@
 // Edited by Yimikami for Lolchi (https://github.com/Yimikami/lolchi)
 
 // Your Riot Games API Key
-const API_KEY = 'RGAPI-dcadb32f-e34c-43a6-93c5-ddc1e600db3a';
+const API_KEY = 'YOUR API KEY';
 
 // Time in seconds to cache responses
 // You may want lower or higher depending on how real time you need info

@@ -23,7 +23,7 @@ Welcome to the Lolchi web application! This tool allows you to track your game s
    ```
 4. Start the application:
    ```bash
-   npm start
+   npm run dev
    ```
 
 ## Usage
@@ -49,6 +49,33 @@ We welcome contributions! Please follow these steps:
    git push origin feature-branch
    ```
 5. Create a pull request.
+
+## Deployment on Cloudflare Workers
+
+With the introduction of `worker.js`, you can now deploy Lolchi on Cloudflare Workers without the need for a traditional server setup.
+
+If you prefer not to use the Cloudflare Worker script, you can find the old `server.js` and `riot.ts` files in the `OLD_FILES` directory.
+
+### Steps to Deploy
+
+1. **Set up a Cloudflare Workers account**: If you don't have one, sign up at [Cloudflare](https://www.cloudflare.com/).
+2. **Deploy the Worker**:
+   - Use the Cloudflare dashboard or Wrangler CLI to deploy your `worker.js` file.
+   - Ensure your environment variables are set up correctly in the Cloudflare dashboard.
+
+For more detailed instructions, refer to the [Cloudflare Workers documentation](https://developers.cloudflare.com/workers/).
+
+### CORS Configuration
+
+For development purposes, you can set `const ALLOWED_ORIGINS = ["*"];` in `worker.js` to allow all origins. However, for production deployment, it's recommended to specify your own domain to enhance security.
+
+```javascript
+// Example for development
+const ALLOWED_ORIGINS = ["*"];
+
+// Example for production
+const ALLOWED_ORIGINS = ["https://yourdomain.com"];
+```
 
 ## License
 

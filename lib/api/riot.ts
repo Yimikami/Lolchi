@@ -8,7 +8,8 @@ async function fetchDirect(url: string) {
   if (!response.ok) {
     throw new Error(`API Error: ${response.status}`);
   }
-  return response.json();
+  const data = await response.json();
+  return data;
 }
 
 export async function getAccountByRiotID(
@@ -31,7 +32,7 @@ export async function getRankedInfo(region: RegionId, summonerId: string) {
 }
 
 export async function getCurrentGame(region: RegionId, puuid: string) {
-  const url = `${BASE_URL}/spectator/active-games/by-summoner/${region}/${puuid}`;
+  const url = `${BASE_URL}/spectator/${region}/${puuid}`;
   return fetchDirect(url);
 }
 
@@ -51,6 +52,18 @@ export async function getMatchDetails(platform: Platform, matchId: string) {
 }
 
 export async function getChampionNameById(championId: number) {
-  const url = `${BASE_URL}/champion/${championId}`;
-  return fetchDirect(url);
+  try {
+    const url = `https://ddragon.leagueoflegends.com/cdn/14.23.1/data/en_US/champion.json`;
+    const response = await fetch(url);
+    const data = await response.json();
+    const champions = data.data;
+    for (const champion of Object.values(champions as Record<string, any>)) {
+      if (champion.key == championId.toString()) {
+        return { name: champion.id };
+      }
+    }
+    throw new Error("Champion not found");
+  } catch (error) {
+    throw new Error(`Error fetching champion name: ${error}`);
+  }
 }

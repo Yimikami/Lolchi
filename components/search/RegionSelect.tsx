@@ -17,7 +17,7 @@ interface RegionSelectProps {
 export function RegionSelect({ value, onValueChange }: RegionSelectProps) {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className={`w-[180px]`}>
         <SelectValue placeholder="Select region" />
       </SelectTrigger>
       <SelectContent>

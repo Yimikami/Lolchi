@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import Link from "next/link";
+import { Loader } from "lucide-react";
 
 interface MatchHistoryProps {
   summonerId: string;
@@ -34,7 +35,9 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
 
       const matchIds = await getMatchList(regionConfig.platform, summonerId);
       const matchDetails: Match[] = await Promise.all(
-        matchIds.slice(0, 10).map((id: string) => getMatchDetails(regionConfig.platform, id))
+        matchIds
+          .slice(0, 10)
+          .map((id: string) => getMatchDetails(regionConfig.platform, id))
       );
       setMatches(matchDetails);
     } catch (error) {
@@ -61,14 +64,17 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
 
           const ranks: { [key: string]: string } = {};
           const queueId = selectedMatch.info.queueId;
-          const rankType = queueId === 440 ? "RANKED_FLEX_SR" : "RANKED_SOLO_5x5";
+          const rankType =
+            queueId === 440 ? "RANKED_FLEX_SR" : "RANKED_SOLO_5x5";
           participantIds.forEach((id, index) => {
             const rankInfo = rankInfos[index];
             if (rankInfo.length > 0) {
               const selectedRank = rankInfo.find(
                 (rank: { queueType: string }) => rank.queueType === rankType
               );
-              ranks[id] = selectedRank ? `${selectedRank.tier} ${selectedRank.rank}` : "Unranked";
+              ranks[id] = selectedRank
+                ? `${selectedRank.tier} ${selectedRank.rank}`
+                : "Unranked";
             } else {
               ranks[id] = "Unranked";
             }
@@ -125,57 +131,64 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
     "450": "ARAM",
   };
 
-  const loadingIndicator = loading ? <div>Loading matches...</div> : null;
+  const loadingIndicator = loading ? (
+    <div>
+      <Loader className="animate-spin" />
+    </div>
+  ) : null;
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold mb-4">Match History</h2>
+      <h2 className="text-3xl font-extrabold mb-6">Match History</h2>
       {loadingIndicator}
       {matches.map((match) => (
         <div
           key={match.metadata.matchId}
           onClick={() => handleMatchClick(match)}
-          className="mb-6"
+          className="mb-6 cursor-pointer hover:shadow-lg transition-shadow duration-300"
         >
           <MatchCard match={match} summonerId={summonerId} />
         </div>
       ))}
       {selectedMatch && (
         <Dialog open={isModalOpen} onOpenChange={closeModal}>
-          <DialogContent className="w-full max-w-6xl">
+          <DialogContent className="w-full max-w-6xl rounded-lg shadow-xl">
             <DialogHeader>
-              <DialogTitle>Match Details</DialogTitle>
+              <DialogTitle className="text-xl font-bold">
+                Match Details
+              </DialogTitle>
               <div className="text-sm text-gray-500 mb-2">
                 Game Duration:{" "}
                 {Math.floor(selectedMatch.info.gameDuration / 60)}m{" "}
                 {selectedMatch.info.gameDuration % 60}s
               </div>
-
-              <div className="text-sm text-gray-500">
-                {queueIds[selectedMatch.info.queueId] || "Unknown Queue"}
-              </div>
             </DialogHeader>
-            <div>
-              <div className="flex justify-between">
-                <div className="w-1/2 pr-2">
-                  <h3
-                    className={`text-lg font-bold ${
-                      selectedMatch.info.participants.some(
-                        (participant) =>
-                          participant.teamId === 100 && participant.win
-                      )
-                        ? "text-blue-500"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {selectedMatch.info.participants.some(
+            <div className="bg-white p-4 rounded-lg shadow-md">
+              <div className="flex justify-between mb-4">
+                <h3
+                  className={`text-lg font-bold ${
+                    selectedMatch.info.participants.some(
                       (participant) =>
                         participant.teamId === 100 && participant.win
                     )
-                      ? "Victory"
-                      : "Defeat"}
-                  </h3>
+                      ? "text-blue-500"
+                      : "text-red-500"
+                  }`}
+                >
+                  {selectedMatch.info.participants.some(
+                    (participant) =>
+                      participant.teamId === 100 && participant.win
+                  )
+                    ? "Victory"
+                    : "Defeat"}
+                </h3>
+                <div className="text-sm text-gray-500">
+                  {queueIds[selectedMatch.info.queueId] || "Unknown Queue"}
+                </div>
+              </div>
 
+              <div className="grid grid-cols-2 gap-4">
+                <div className="pr-2">
                   {selectedMatch.info.participants
                     .filter((participant) => participant.teamId === 100)
                     .map((participant) => (
@@ -220,11 +233,10 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                           </p>
                           <Link
                             href={`/${region}/${participant.riotIdGameName}+${participant.riotIdTagline}`}
+                            className="font-bold hover:text-primary transition-colors duration-300"
                           >
-                            <p className="font-bold">
-                              {participant.riotIdGameName}#
-                              {participant.riotIdTagline}
-                            </p>
+                            {participant.riotIdGameName}#
+                            {participant.riotIdTagline}
                           </Link>
                           <p className="text-sm">
                             {participant.kills}/{participant.deaths}/
@@ -249,30 +261,15 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                                 alt={`Item ${index + 1}`}
                                 width={24}
                                 height={24}
+                                className="rounded"
                               />
                             ))}
                         </div>
                       </div>
                     ))}
                 </div>
-                <div className="w-1/2 pl-2">
-                  <h3
-                    className={`text-lg font-bold ${
-                      selectedMatch.info.participants.some(
-                        (participant) =>
-                          participant.teamId === 200 && participant.win
-                      )
-                        ? "text-blue-500"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {selectedMatch.info.participants.some(
-                      (participant) =>
-                        participant.teamId === 200 && participant.win
-                    )
-                      ? "Victory"
-                      : "Defeat"}
-                  </h3>
+
+                <div className="pl-2">
                   {selectedMatch.info.participants
                     .filter((participant) => participant.teamId === 200)
                     .map((participant) => (
@@ -317,11 +314,10 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                           </p>
                           <Link
                             href={`/${region}/${participant.riotIdGameName}+${participant.riotIdTagline}`}
+                            className="font-bold hover:text-primary transition-colors duration-300"
                           >
-                            <p className="font-bold">
-                              {participant.riotIdGameName}#
-                              {participant.riotIdTagline}
-                            </p>
+                            {participant.riotIdGameName}#
+                            {participant.riotIdTagline}
                           </Link>
                           <p className="text-sm">
                             {participant.kills}/{participant.deaths}/
@@ -346,6 +342,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                                 alt={`Item ${index + 1}`}
                                 width={24}
                                 height={24}
+                                className="rounded"
                               />
                             ))}
                         </div>

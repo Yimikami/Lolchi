@@ -50,3 +50,8 @@ export async function getMatchDetails(platform: Platform, matchId: string) {
   const url = `${BASE_URL}/match/${platform}/${matchId}`;
   return fetchDirect(url);
 }
+
+export async function getChampionRotation(region: RegionId) {
+  const url = `${BASE_URL}/champion-rotation/${region}`;
+  return fetchDirect(url);
+}

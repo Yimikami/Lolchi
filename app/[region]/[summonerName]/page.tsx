@@ -11,6 +11,7 @@ import { Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { RegionId, regions } from "@/lib/config/regions";
+import Footer from "@/app/footer";
 
 export default async function SummonerPage({
   params,
@@ -69,6 +70,7 @@ export default async function SummonerPage({
             />
           </div>
         </div>
+        <Footer />
       </div>
     );
   } catch (error) {

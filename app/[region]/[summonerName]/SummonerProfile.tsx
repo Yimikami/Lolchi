@@ -21,21 +21,21 @@ export function SummonerProfile({
   );
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 bg-white shadow-lg rounded-lg">
       <div className="flex flex-col md:flex-row items-center gap-6">
         <div className="relative w-32 h-32">
           <Image
             src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/profileicon/${summoner.profileIconId}.png`}
             alt="Summoner Icon"
             fill
-            className="rounded-lg"
+            className="rounded-full shadow-md"
           />
         </div>
 
         <div className="flex-1">
-          <h1 className="text-3xl font-bold mb-2">{summonerName}</h1>
+          <h1 className="text-4xl font-extrabold mb-2 text-gray-800">{summonerName}</h1>
 
-          <p className="text-muted-foreground mb-4">
+          <p className="text-lg text-gray-600 mb-4">
             Level {summoner.summonerLevel}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

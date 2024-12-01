@@ -6,6 +6,7 @@ import {
   getSummonerByPUUID,
 } from "@/lib/api/riot";
 import { RegionId, regions } from "@/lib/config/regions";
+import Footer from "@/app/footer";
 
 export default async function LivePage({
   params,
@@ -33,12 +34,15 @@ export default async function LivePage({
     }
 
     return (
-      <LiveGamePage
-        region={params.region}
-        gameData={gameData}
-        summonerName={params.summonerName}
-        tagLine={params.tagLine}
-      />
+      <div className="min-h-screen flex flex-col items-center px-4 pt-8 bg-gradient-to-b from-background to-secondary">
+        <LiveGamePage
+          gameData={gameData}
+          region={params.region}
+          summonerName={summonerName}
+          tagLine={tagLine}
+        />
+        <Footer />
+      </div>
     );
   } catch (error) {
     console.error("Error loading live game page:", error);

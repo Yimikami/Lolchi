@@ -57,6 +57,9 @@ async function handleRequest(request) {
       case 'spectator':
         endpoint = `/lol/spectator/v5/active-games/by-summoner/${pathSegments[4]}`;
         break;
+      case 'champion-rotation':
+        endpoint = `/lol/platform/v3/champion-rotations`;
+        break;
     }
   }
 

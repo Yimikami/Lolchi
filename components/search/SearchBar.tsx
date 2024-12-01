@@ -25,18 +25,22 @@ export function SearchBar() {
   return (
     <form
       onSubmit={handleSearch}
-      className="flex flex-col sm:flex-row gap-4 w-full max-w-2xl"
+      className="flex flex-col sm:flex-row gap-4 w-full max-w-2xl bg-white shadow-md rounded-lg p-4"
     >
       <RegionSelect value={region} onValueChange={setRegion} />
-      <div className="flex-1 flex gap-2">
+      <div className="flex-1 flex flex-col sm:flex-row gap-2">
         <Input
           placeholder="Search summoner..."
           value={summonerName}
           onChange={(e) => setSummonerName(e.target.value)}
-          className="flex-1"
+          className="flex-1 rounded-lg border-gray-300 focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
         />
-        <Button type="submit">
-          <Search className="h-4 w-4 mr-2" />
+
+        <Button
+          type="submit"
+          className="flex items-center justify-center rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors duration-300"
+        >
+          <Search className="h-5 w-5 mr-2" />
           Search
         </Button>
       </div>

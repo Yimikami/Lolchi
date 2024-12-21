@@ -34,51 +34,62 @@ const ChampionRotation: React.FC<ChampionRotationProps> = ({ region }) => {
 
   if (loading)
     return (
-      <div>
-        <Loader className="animate-spin" />
+      <div className="min-h-[300px] flex items-center justify-center">
+        <Loader className="w-8 h-8 animate-spin text-blue-500" />
       </div>
     );
-  if (error) return <div>{error}</div>;
+  if (error) return <div className="text-red-500 text-center p-4">{error}</div>;
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-bold mb-4 text-center">Champion Rotation</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <h3 className="text-xl text-center font-semibold mb-3">
+    <div className="bg-white/95 backdrop-blur-sm shadow-xl rounded-xl border-0 p-8">
+      <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+        Champion Rotation
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="space-y-6">
+          <h3 className="text-xl font-bold text-center text-gray-800 mb-6">
             Free Champions
           </h3>
-          <ul className="flex flex-wrap gap-4 justify-center">
-            {freeChampions.map((id) => (
-              <li key={id} className="flex flex-col items-center">
-                <Image
-                  src={`https://cdn.communitydragon.org/14.23.1/champion/${id}/square`}
-                  alt={`Champion ${id}`}
-                  width={64}
-                  height={64}
-                  className="rounded-full border border-gray-300"
-                />
-              </li>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center">
+            {freeChampions.map((championId) => (
+              <div
+                key={championId}
+                className="relative group transform transition-all duration-200 hover:scale-110"
+              >
+                <div className="relative w-16 h-16">
+                  <Image
+                    src={`https://cdn.communitydragon.org/14.23.1/champion/${championId}/square`}
+                    alt={`Champion ${championId}`}
+                    fill
+                    className="rounded-lg shadow-md group-hover:shadow-lg transition-shadow duration-200"
+                  />
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
-        <div>
-          <h3 className="text-xl text-center font-semibold mb-3">
-            New Player Champions <br /> (Before Level 10)
+
+        <div className="space-y-6">
+          <h3 className="text-xl font-bold text-center text-gray-800 mb-6">
+            Free for New Players
           </h3>
-          <ul className="flex flex-wrap gap-4 justify-center">
-            {newPlayerChampions.map((id) => (
-              <li key={id} className="flex flex-col items-center">
-                <Image
-                  src={`https://cdn.communitydragon.org/14.23.1/champion/${id}/square`}
-                  alt={`Champion ${id}`}
-                  width={64}
-                  height={64}
-                  className="rounded-full border border-gray-300"
-                />
-              </li>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center">
+            {newPlayerChampions.map((championId) => (
+              <div
+                key={championId}
+                className="relative group transform transition-all duration-200 hover:scale-110"
+              >
+                <div className="relative w-16 h-16">
+                  <Image
+                    src={`https://cdn.communitydragon.org/14.23.1/champion/${championId}/square`}
+                    alt={`Champion ${championId}`}
+                    fill
+                    className="rounded-lg shadow-md group-hover:shadow-lg transition-shadow duration-200"
+                  />
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </div>
     </div>

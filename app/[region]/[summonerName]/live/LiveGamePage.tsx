@@ -132,109 +132,116 @@ export default function LiveGamePage({
   const redTeam = gameData.participants.filter((p) => p.teamId === 200);
 
   return (
-    <div className="container mx-auto p-4 bg-gradient-to-b from-gray-100 to-gray-300 min-h-screen">
+    <div className="w-full max-w-7xl mx-auto space-y-6">
       <Link
         href={`/${region}/${summonerName}+${tagLine}`}
-        className="flex items-center text-muted-foreground mb-4 hover:text-primary transition-colors duration-300"
+        className="inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-200 font-medium"
       >
         <Home size={24} className="mr-2" />
-        Back to Profile Page
+        Back to Profile
       </Link>
-      <Card className="mb-6 shadow-lg rounded-lg">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold">
+
+      <Card className="bg-white/95 backdrop-blur-sm shadow-xl rounded-xl border-0">
+        <CardHeader className="space-y-2">
+          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
             Live Game #{gameData.gameId}
           </CardTitle>
-          <CardTitle className="text-lg font-medium">
+          <div className="text-lg font-medium text-gray-700">
             {SummonerName}#{tagLine}'s Game
-          </CardTitle>
+          </div>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
             <div>
-              <Badge variant="outline" className="bg-white text-black">
+              <Badge className="bg-blue-500 text-white hover:bg-blue-600 transition-colors px-4 py-1 text-sm font-medium">
                 {queueIds[gameData.gameQueueConfigId]}
               </Badge>
             </div>
-            <div className="flex justify-end">
-              <div className="flex space-x-2">
-                <p className="text-sm text-muted-foreground">Bans:</p>
-                {gameData.bannedChampions.map(
-                  (ban, index) =>
-                    ban.championId !== -1 && (
-                      <Image
-                        key={index}
-                        src={`https://cdn.communitydragon.org/14.23.1/champion/${ban.championId}/square`}
-                        alt={`Ban ${ban.championId}`}
-                        width={32}
-                        height={32}
-                        className=""
-                      />
-                    )
-                )}
+            <div className="flex justify-end items-center">
+              <div className="flex items-center gap-3">
+                <p className="text-sm font-medium text-gray-600">Banned Champions:</p>
+                <div className="flex gap-2">
+                  {gameData.bannedChampions.map(
+                    (ban, index) =>
+                      ban.championId !== -1 && (
+                        <div key={index} className="relative group">
+                          <Image
+                            src={`https://cdn.communitydragon.org/14.23.1/champion/${ban.championId}/square`}
+                            alt={`Ban ${ban.championId}`}
+                            width={32}
+                            height={32}
+                            className="rounded-md shadow-sm transition-transform duration-200 group-hover:scale-110"
+                          />
+                        </div>
+                      )
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <Card className="shadow-lg rounded-lg">
-          <CardHeader>
-            <CardTitle className="text-lg font-medium">Blue Team</CardTitle>
+      <div className="grid md:grid-cols-2 gap-8">
+        <Card className="bg-blue-50/50 backdrop-blur-sm shadow-xl rounded-xl border-0">
+          <CardHeader className="border-b border-blue-100/50">
+            <CardTitle className="text-xl font-bold text-blue-900">Blue Team</CardTitle>
           </CardHeader>
-          <CardContent>
-            <Table className="rounded-lg overflow-hidden">
-              <TableHeader className="bg-gray-200">
-                <TableRow>
-                  <TableHead>Summoner</TableHead>
-                  <TableHead>Rank</TableHead>
-                  <TableHead>Wins</TableHead>
-                  <TableHead>Losses</TableHead>
-                  <TableHead>Win Rate</TableHead>
+          <CardContent className="pt-6">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-blue-100/50 hover:bg-blue-100/70">
+                  <TableHead className="font-semibold text-blue-900">Summoner</TableHead>
+                  <TableHead className="font-semibold text-blue-900">Rank</TableHead>
+                  <TableHead className="font-semibold text-blue-900">Wins</TableHead>
+                  <TableHead className="font-semibold text-blue-900">Losses</TableHead>
+                  <TableHead className="font-semibold text-blue-900">Win Rate</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {blueTeam.map((participant) => (
                   <TableRow
                     key={participant.riotId}
-                    className="hover:bg-gray-100 transition-colors duration-300"
+                    className="hover:bg-blue-100/30 transition-colors duration-200"
                   >
                     <TableCell>
-                      <div className="flex items-center">
-                        <Image
-                          src={`https://cdn.communitydragon.org/14.23.1/champion/${participant.championId}/square`}
-                          alt={`Champion ${participant.championId}`}
-                          width={48}
-                          height={48}
-                          className="rounded-full"
-                        />
+                      <div className="flex items-center gap-3">
+                        <div className="relative group">
+                          <Image
+                            src={`https://cdn.communitydragon.org/14.23.1/champion/${participant.championId}/square`}
+                            alt={`Champion ${participant.championId}`}
+                            width={48}
+                            height={48}
+                            className="rounded-lg shadow-md transition-transform duration-200 group-hover:scale-110"
+                          />
+                        </div>
                         <Link
                           href={`/${region}/${
                             participant.riotId.split("#")[0]
                           }+${participant.riotId.split("#")[1]}`}
-                          className="ml-2  hover:text-primary transition-colors duration-300"
+                          className="font-medium hover:text-blue-600 transition-colors duration-200"
                         >
                           {participant.riotId}
                         </Link>
                       </div>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="font-medium">
                       {ranks[participant.summonerId]?.rank || (
-                        <Loader className="animate-spin" />
+                        <Loader className="w-4 h-4 animate-spin text-blue-500" />
                       )}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-green-600 font-medium">
                       {ranks[participant.summonerId]?.wins !== undefined
                         ? ranks[participant.summonerId].wins
                         : 0}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-red-600 font-medium">
                       {ranks[participant.summonerId]?.losses !== undefined
                         ? ranks[participant.summonerId].losses
                         : 0}
                     </TableCell>
                     <TableCell
+                      className="font-bold"
                       style={getWinRateStyle(
                         ranks[participant.summonerId]?.winRate
                       )}
@@ -250,62 +257,65 @@ export default function LiveGamePage({
           </CardContent>
         </Card>
 
-        <Card className="shadow-lg rounded-lg">
-          <CardHeader>
-            <CardTitle className="text-lg font-medium">Red Team</CardTitle>
+        <Card className="bg-red-50/50 backdrop-blur-sm shadow-xl rounded-xl border-0">
+          <CardHeader className="border-b border-red-100/50">
+            <CardTitle className="text-xl font-bold text-red-900">Red Team</CardTitle>
           </CardHeader>
-          <CardContent>
-            <Table className="rounded-lg overflow-hidden">
-              <TableHeader className="bg-gray-200">
-                <TableRow>
-                  <TableHead>Summoner</TableHead>
-                  <TableHead>Rank</TableHead>
-                  <TableHead>Wins</TableHead>
-                  <TableHead>Losses</TableHead>
-                  <TableHead>Win Rate</TableHead>
+          <CardContent className="pt-6">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-red-100/50 hover:bg-red-100/70">
+                  <TableHead className="font-semibold text-red-900">Summoner</TableHead>
+                  <TableHead className="font-semibold text-red-900">Rank</TableHead>
+                  <TableHead className="font-semibold text-red-900">Wins</TableHead>
+                  <TableHead className="font-semibold text-red-900">Losses</TableHead>
+                  <TableHead className="font-semibold text-red-900">Win Rate</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {redTeam.map((participant) => (
                   <TableRow
                     key={participant.riotId}
-                    className="hover:bg-gray-100 transition-colors duration-300"
+                    className="hover:bg-red-100/30 transition-colors duration-200"
                   >
                     <TableCell>
-                      <div className="flex items-center">
-                        <Image
-                          src={`https://cdn.communitydragon.org/14.23.1/champion/${participant.championId}/square`}
-                          alt={`Champion ${participant.championId}`}
-                          width={48}
-                          height={48}
-                          className="rounded-full"
-                        />
+                      <div className="flex items-center gap-3">
+                        <div className="relative group">
+                          <Image
+                            src={`https://cdn.communitydragon.org/14.23.1/champion/${participant.championId}/square`}
+                            alt={`Champion ${participant.championId}`}
+                            width={48}
+                            height={48}
+                            className="rounded-lg shadow-md transition-transform duration-200 group-hover:scale-110"
+                          />
+                        </div>
                         <Link
                           href={`/${region}/${
                             participant.riotId.split("#")[0]
                           }+${participant.riotId.split("#")[1]}`}
-                          className="ml-2 hover:text-primary transition-colors duration-300"
+                          className="font-medium hover:text-red-600 transition-colors duration-200"
                         >
                           {participant.riotId}
                         </Link>
                       </div>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="font-medium">
                       {ranks[participant.summonerId]?.rank || (
-                        <Loader className="animate-spin" />
+                        <Loader className="w-4 h-4 animate-spin text-red-500" />
                       )}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-green-600 font-medium">
                       {ranks[participant.summonerId]?.wins !== undefined
                         ? ranks[participant.summonerId].wins
                         : 0}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-red-600 font-medium">
                       {ranks[participant.summonerId]?.losses !== undefined
                         ? ranks[participant.summonerId].losses
                         : 0}
                     </TableCell>
                     <TableCell
+                      className="font-bold"
                       style={getWinRateStyle(
                         ranks[participant.summonerId]?.winRate
                       )}

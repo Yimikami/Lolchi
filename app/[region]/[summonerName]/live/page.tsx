@@ -34,14 +34,18 @@ export default async function LivePage({
     }
 
     return (
-      <div className="min-h-screen flex flex-col items-center px-4 pt-8 bg-gradient-to-b from-background to-secondary">
-        <LiveGamePage
-          gameData={gameData}
-          region={params.region}
-          summonerName={summonerName}
-          tagLine={tagLine}
-        />
-        <Footer />
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
+        <div className="container mx-auto px-4 py-8">
+          <LiveGamePage
+            gameData={gameData}
+            region={params.region}
+            summonerName={summonerName}
+            tagLine={tagLine}
+          />
+          <div className="mt-8">
+            <Footer />
+          </div>
+        </div>
       </div>
     );
   } catch (error) {

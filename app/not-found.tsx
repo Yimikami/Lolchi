@@ -4,23 +4,28 @@ import { Home } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-100 to-gray-200">
-      <h1 className="text-5xl font-extrabold mb-4 text-gray-800">
-        Summoner Not Found
-      </h1>
-      <p className="text-lg text-gray-600 mb-8">
-        The summoner you're looking for doesn't exist or there was an error
-        fetching their data.
-      </p>
-      <Button
-        asChild
-        className="hover:bg-primary transition-colors duration-300"
-      >
-        <Link href="/">
-          <Home className="mr-2 h-5 w-5" />
-          Return Home
-        </Link>
-      </Button>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50">
+      <div className="text-center space-y-6 max-w-2xl mx-auto px-4">
+        <h1 className="text-6xl font-extrabold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+          404
+        </h1>
+        <h2 className="text-3xl font-bold text-gray-800">
+          Summoner Not Found
+        </h2>
+        <p className="text-lg text-gray-600 max-w-md mx-auto">
+          The summoner you're looking for doesn't exist or there was an error
+          fetching their data.
+        </p>
+        <Button
+          asChild
+          className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all duration-200"
+        >
+          <Link href="/" className="inline-flex items-center px-6 py-3">
+            <Home className="mr-2 h-5 w-5" />
+            Return Home
+          </Link>
+        </Button>
+      </div>
     </div>
   );
 }

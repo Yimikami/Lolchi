@@ -39,8 +39,8 @@ export async function getCurrentGame(region: RegionId, puuid: string) {
 export async function getMatchList(
   platform: Platform,
   puuid: string,
-  start = 0,
-  count = 20
+  start: number,
+  count: number
 ) {
   const url = `${BASE_URL}/matches/${platform}/${puuid}?start=${start}&count=${count}`;
   return fetchDirect(url);

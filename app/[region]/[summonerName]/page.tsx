@@ -43,34 +43,48 @@ export default async function SummonerPage({
       console.error("Player is not in a game");
     }
     return (
-      <div className="container mx-auto px-4 py-8">
-        <a href="/" className="flex items-center text-muted-foreground mb-4">
-          <Home size={24} className="mr-2" />
-          Back to home
-        </a>
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto px-4 py-8 space-y-8">
+          <Link
+            href="/"
+            className="inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-200"
+          >
+            <Home size={24} className="mr-2" />
+            <span className="font-medium">Back to home</span>
+          </Link>
 
-        <SummonerProfile
-          summoner={summoner}
-          rankedInfo={rankedInfo}
-          summonerName={`${SummonerName}`}
-        />
-        <br />
-        {gameData ? (
-          <Button>
-            <Link href={`/${params.region}/${params.summonerName}/live`}>
-              Live Game
-            </Link>
-          </Button>
-        ) : null}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
-          <div className="lg:col-span-3">
-            <MatchHistory
-              summonerId={summoner.puuid}
-              region={params.region as any}
-            />
+          <SummonerProfile
+            summoner={summoner}
+            rankedInfo={rankedInfo}
+            summonerName={`${SummonerName}`}
+          />
+
+          {gameData && (
+            <div className="flex justify-center">
+              <Button
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+              >
+                <Link
+                  href={`/${params.region}/${params.summonerName}/live`}
+                  className="text-white font-medium"
+                >
+                  Live Game
+                </Link>
+              </Button>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 gap-8">
+            <div className="w-full">
+              <MatchHistory
+                summonerId={summoner.puuid}
+                region={params.region as any}
+              />
+            </div>
           </div>
+
+          <Footer />
         </div>
-        <Footer />
       </div>
     );
   } catch (error) {

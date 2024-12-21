@@ -24,30 +24,52 @@ interface MatchHistoryProps {
 export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [offset, setOffset] = useState(0);
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ranks, setRanks] = useState<{ [key: string]: string }>({});
 
-  const fetchMatches = async () => {
+  const fetchMatches = async (isLoadMore = false) => {
     try {
       const regionConfig = regions.find((r) => r.id === region);
       if (!regionConfig) return;
 
-      const matchIds = await getMatchList(regionConfig.platform, summonerId);
-      const matchDetails: Match[] = await Promise.all(
-        matchIds
-          .slice(0, 10)
-          .map((id: string) => getMatchDetails(regionConfig.platform, id))
+      if (isLoadMore) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+      }
+
+      const startIndex = isLoadMore ? offset : 0;
+      const matchIds = await getMatchList(
+        regionConfig.platform,
+        summonerId,
+        startIndex,
+        10
       );
-      setMatches(matchDetails);
+
+      const matchDetails: Match[] = await Promise.all(
+        matchIds.map((id: string) => getMatchDetails(regionConfig.platform, id))
+      );
+
+      if (isLoadMore) {
+        setMatches((prev) => [...prev, ...matchDetails]);
+        setOffset(startIndex + matchIds.length);
+      } else {
+        setMatches(matchDetails);
+        setOffset(matchIds.length);
+      }
     } catch (error) {
       console.error("Error fetching matches:", error);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
   useEffect(() => {
+    setOffset(0);
     fetchMatches();
   }, [summonerId]);
 
@@ -131,25 +153,43 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
     "450": "ARAM",
   };
 
-  const loadingIndicator = loading ? (
-    <div>
-      <Loader className="animate-spin" />
-    </div>
-  ) : null;
-
   return (
-    <div className="space-y-4">
-      <h2 className="text-3xl font-extrabold mb-6">Match History</h2>
-      {loadingIndicator}
-      {matches.map((match) => (
-        <div
-          key={match.metadata.matchId}
-          onClick={() => handleMatchClick(match)}
-          className="mb-6 cursor-pointer hover:shadow-lg transition-shadow duration-300"
-        >
-          <MatchCard match={match} summonerId={summonerId} />
+    <div className="space-y-4 max-w-5xl mx-auto px-4">
+      {loading ? (
+        <div className="flex justify-center items-center min-h-[200px] bg-white/50 backdrop-blur-sm rounded-xl p-8">
+          <Loader className="w-8 h-8 animate-spin text-blue-500" />
         </div>
-      ))}
+      ) : (
+        <>
+          {matches.map((match) => (
+            <div
+              key={match.metadata.matchId}
+              onClick={() => handleMatchClick(match)}
+              className="transform transition-all duration-200 hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+            >
+              <MatchCard match={match} summonerId={summonerId} />
+            </div>
+          ))}
+          <div className="flex justify-center mt-6 pb-6">
+            <button
+              onClick={() => fetchMatches(true)}
+              disabled={loadingMore}
+              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg 
+              hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed
+              shadow-md hover:shadow-lg transition-all duration-200 font-medium flex items-center gap-2"
+            >
+              {loadingMore ? (
+                <>
+                  <Loader className="w-4 h-4 animate-spin" />
+                  <span>Loading...</span>
+                </>
+              ) : (
+                "Load more..."
+              )}
+            </button>
+          </div>
+        </>
+      )}
       {selectedMatch && (
         <Dialog open={isModalOpen} onOpenChange={closeModal}>
           <DialogContent className="w-full max-w-6xl rounded-lg shadow-xl">
@@ -182,9 +222,23 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                     ? "Victory"
                     : "Defeat"}
                 </h3>
-                <div className="text-sm text-gray-500">
-                  {queueIds[selectedMatch.info.queueId] || "Unknown Queue"}
-                </div>
+                <h3
+                  className={`text-lg font-bold ${
+                    selectedMatch.info.participants.some(
+                      (participant) =>
+                        participant.teamId === 200 && participant.win
+                    )
+                      ? "text-blue-500"
+                      : "text-red-500"
+                  }`}
+                >
+                  {selectedMatch.info.participants.some(
+                    (participant) =>
+                      participant.teamId === 200 && participant.win
+                  )
+                    ? "Victory"
+                    : "Defeat"}
+                </h3>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -196,36 +250,36 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                         key={participant.puuid}
                         className="flex items-center mb-2"
                       >
-                        <div className="relative">
-                          <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${participant.championName}.png`}
-                            alt={participant.championName}
-                            width={48}
-                            height={48}
-                            className="rounded-full"
-                          />
-                          <span className="absolute top-0 left-0 bg-black text-white text-xs font-bold rounded-full px-1">
-                            {participant.champLevel}
-                          </span>
-                          <div className="flex justify-center mt-1"></div>
-                          <div className="flex justify-center mt-1">
+                        <div className="relative group">
+                          <div className="relative w-16 h-16 transition-transform duration-200 group-hover:scale-105">
                             <Image
-                              src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
-                                summonerSpells[participant.summoner1Id]
-                              }.png`}
-                              alt={summonerSpells[participant.summoner1Id]}
-                              width={16}
-                              height={16}
-                              className="mr-1"
+                              src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${participant.championName}.png`}
+                              alt="Champion"
+                              fill
+                              className="rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
                             />
-                            <Image
-                              src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
-                                summonerSpells[participant.summoner2Id]
-                              }.png`}
-                              alt={summonerSpells[participant.summoner2Id]}
-                              width={16}
-                              height={16}
-                            />
+                          </div>
+                          <div className="mt-1 flex gap-0.5 justify-center">
+                            <div className="relative w-6 h-6 transition-transform duration-200 hover:scale-110">
+                              <Image
+                                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                                  summonerSpells[participant.summoner1Id]
+                                }.png`}
+                                alt="Spell 1"
+                                fill
+                                className="rounded-md shadow-sm hover:shadow-md transition-shadow duration-200"
+                              />
+                            </div>
+                            <div className="relative w-6 h-6 transition-transform duration-200 hover:scale-110">
+                              <Image
+                                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                                  summonerSpells[participant.summoner2Id]
+                                }.png`}
+                                alt="Spell 2"
+                                fill
+                                className="rounded-md shadow-sm hover:shadow-md transition-shadow duration-200"
+                              />
+                            </div>
                           </div>
                         </div>
                         <div className="ml-2">
@@ -278,35 +332,36 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                         key={participant.puuid}
                         className="flex items-center mb-2"
                       >
-                        <div className="relative">
-                          <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${participant.championName}.png`}
-                            alt={participant.championName}
-                            width={48}
-                            height={48}
-                            className="rounded-full"
-                          />
-                          <span className="absolute top-0 left-0 bg-black text-white text-xs font-bold rounded-full px-1">
-                            {participant.champLevel}
-                          </span>
-                          <div className="flex justify-center mt-1">
+                        <div className="relative group">
+                          <div className="relative w-16 h-16 transition-transform duration-200 group-hover:scale-105">
                             <Image
-                              src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
-                                summonerSpells[participant.summoner1Id]
-                              }.png`}
-                              alt={summonerSpells[participant.summoner1Id]}
-                              width={16}
-                              height={16}
-                              className="mr-1"
+                              src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${participant.championName}.png`}
+                              alt="Champion"
+                              fill
+                              className="rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
                             />
-                            <Image
-                              src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
-                                summonerSpells[participant.summoner2Id]
-                              }.png`}
-                              alt={summonerSpells[participant.summoner2Id]}
-                              width={16}
-                              height={16}
-                            />
+                          </div>
+                          <div className="mt-1 flex gap-0.5 justify-center">
+                            <div className="relative w-6 h-6 transition-transform duration-200 hover:scale-110">
+                              <Image
+                                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                                  summonerSpells[participant.summoner1Id]
+                                }.png`}
+                                alt="Spell 1"
+                                fill
+                                className="rounded-md shadow-sm hover:shadow-md transition-shadow duration-200"
+                              />
+                            </div>
+                            <div className="relative w-6 h-6 transition-transform duration-200 hover:scale-110">
+                              <Image
+                                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                                  summonerSpells[participant.summoner2Id]
+                                }.png`}
+                                alt="Spell 2"
+                                fill
+                                className="rounded-md shadow-sm hover:shadow-md transition-shadow duration-200"
+                              />
+                            </div>
                           </div>
                         </div>
                         <div className="ml-2">
@@ -418,41 +473,41 @@ function MatchCard({
 
   return (
     <Card
-      className={`p-4 ${
+      className={`p-6 ${
         participant.win
-          ? "border-l-4 border-l-green-500"
-          : "border-l-4 border-l-red-500"
+          ? "bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-500"
+          : "bg-gradient-to-r from-red-50 to-red-100 border-l-4 border-red-500"
       }`}
     >
       <div className="flex items-center gap-4">
-        <div className="relative ">
+        <div className="relative group">
           <div className="relative w-16 h-16">
             <Image
               src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${participant.championName}.png`}
               alt="Champion"
               fill
-              className="rounded-lg"
+              className="rounded-lg shadow-md"
             />
           </div>
-          <div className="mt-1 flex  justify-center">
-            <div className="relative w-5 h-5">
+          <div className="mt-1 flex gap-1 justify-center">
+            <div className="relative w-6 h-6">
               <Image
                 src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
                   summonerSpells[participant.summoner1Id]
                 }.png`}
                 alt="Spell 1"
                 fill
-                className="rounded-md"
+                className="rounded-md shadow-sm"
               />
             </div>
-            <div className="relative w-5 h-5">
+            <div className="relative w-6 h-6">
               <Image
                 src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
                   summonerSpells[participant.summoner2Id]
                 }.png`}
                 alt="Spell 2"
                 fill
-                className="rounded-md"
+                className="rounded-md shadow-sm"
               />
             </div>
           </div>
@@ -460,29 +515,36 @@ function MatchCard({
         <div className="flex-1">
           <div className="flex justify-between items-start">
             <div>
-              <p className="font-semibold">
+              <p
+                className={`text-lg font-bold ${
+                  participant.win ? "text-blue-600" : "text-red-600"
+                }`}
+              >
                 {participant.win ? "Victory" : "Defeat"}
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-gray-500">
                 {formatDistanceToNow(match.info.gameCreation)} ago
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-gray-600 font-medium">
                 {queueIds[match.info.queueId] || "Unknown Queue"}
               </p>
             </div>
             <div className="text-right">
-              <p className="font-semibold">
+              <p className="text-xl font-bold text-gray-800">
                 {participant.kills}/{participant.deaths}/{participant.assists}
               </p>
-              <p className="text-sm text-muted-foreground">{kda} KDA</p>
+              <p className="text-sm text-gray-600">{kda} KDA</p>
             </div>
           </div>
-          <div className="mt-2 flex items-center gap-4">
-            <div className="flex gap-1">
+          <div className="mt-3 flex items-center gap-3">
+            <div className="flex gap-1.5">
               {participantItems.map(
                 (itemId, index) =>
                   itemId !== 0 && (
-                    <div key={index} className="relative w-8 h-8">
+                    <div
+                      key={index}
+                      className="relative w-8 h-8 rounded-md overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                    >
                       <Image
                         src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/item/${itemId}.png`}
                         alt="Item"
@@ -493,7 +555,6 @@ function MatchCard({
                   )
               )}
             </div>
-            <p className="text-sm text-muted-foreground"></p>
           </div>
         </div>
       </div>

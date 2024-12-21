@@ -20,7 +20,10 @@ export function HeaderSearchBar() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (summonerName.trim()) {
-      router.push(`/${region}/${summonerName}`);
+      const encodedSummonerName = encodeURIComponent(summonerName.trim())
+        .replace(/%20/g, " ")
+        .replace(/%23/g, "+");
+      router.push(`/${region}/${encodedSummonerName}`);
     }
   };
 

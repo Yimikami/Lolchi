@@ -6,6 +6,8 @@ Welcome to the Lolchi web application! This tool allows you to track your game s
 
 - **Real-time Match Tracking**: Get live updates on your ongoing matches.
 - **Detailed Statistics**: View comprehensive stats for each game, including kills, deaths, assists, and more.
+- **Champion Statistics**: Analyze your performance on different champions.
+- **Recently Played With**: See who you've recently played with.
 
 ## Installation
 

@@ -247,9 +247,14 @@ export default function LiveGamePage({
                       </div>
                     </div>
                     <div>
-                      <div className="font-medium text-blue-900">
+                      <Link
+                        className="font-medium text-blue-900"
+                        href={`/${region}/${participant.riotId.split("#")[0]}+${
+                          participant.riotId.split("#")[1]
+                        }`}
+                      >
                         {participant.riotId}
-                      </div>
+                      </Link>
                       <div className="text-sm text-blue-700">
                         {loading ? (
                           <Loader className="w-4 h-4 animate-spin" />
@@ -349,9 +354,14 @@ export default function LiveGamePage({
                       </div>
                     </div>
                     <div>
-                      <div className="font-medium text-red-900">
+                      <Link
+                        className="font-medium text-red-900"
+                        href={`/${region}/${participant.riotId.split("#")[0]}+${
+                          participant.riotId.split("#")[1]
+                        }`}
+                      >
                         {participant.riotId}
-                      </div>
+                      </Link>
                       <div className="text-sm text-red-700">
                         {loading ? (
                           <Loader className="w-4 h-4 animate-spin" />

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Gamepad, Menu, X, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { HeaderSearchBar } from "@/components/HeaderSearchBar";
+import { HeaderSearchBar } from "@/components/search/HeaderSearchBar";
 import { usePathname } from "next/navigation";
 
 export default function Header() {

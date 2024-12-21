@@ -9,7 +9,7 @@ import {
 import { RegionId, regions } from "@/lib/config/regions";
 import Footer from "@/app/footer";
 import { SummonerProfile } from "../SummonerProfile";
-import { ProfileNavigation } from "../components/ProfileNavigation";
+import { ProfileNavigation } from "@/components/ProfileNavigation";
 
 export default async function LivePage({
   params,

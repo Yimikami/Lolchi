@@ -5,7 +5,6 @@ import { Gamepad, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { refreshProfileData } from "../actions";
 import { RegionId } from "@/lib/config/regions";
 
 interface ProfileNavigationProps {
@@ -23,18 +22,6 @@ export function ProfileNavigation({
   const router = useRouter();
   const isLiveGame = pathname.includes("/live");
   const [isRefreshing, setIsRefreshing] = useState(false);
-
-  const handleRefresh = async () => {
-    try {
-      setIsRefreshing(true);
-      await refreshProfileData(region, summonerName);
-      router.refresh();
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
 
   return (
     <div className="flex items-center gap-4 border-b border-gray-200">
@@ -74,18 +61,6 @@ export function ProfileNavigation({
           Live Game
         </div>
       )}
-
-      <div className="ml-auto">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleRefresh}
-          disabled={isRefreshing}
-          className={`${isRefreshing ? "animate-spin" : ""}`}
-        >
-          <RefreshCw className="w-4 h-4" />
-        </Button>
-      </div>
     </div>
   );
 }

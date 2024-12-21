@@ -10,7 +10,7 @@ import { MatchHistory } from "./MatchHistory";
 import { RecentlyPlayedWith } from "./RecentlyPlayedWith";
 import { ChampionStatistics } from "./ChampionStatistics";
 import Footer from "@/app/footer";
-import { ProfileNavigation } from "./components/ProfileNavigation";
+import { ProfileNavigation } from "@/components/ProfileNavigation";
 
 export default async function SummonerPage({
   params,

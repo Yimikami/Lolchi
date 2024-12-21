@@ -473,7 +473,7 @@ function MatchCard({
 
   return (
     <Card
-      className={`p-6 ${
+      className={`p-3 ${
         participant.win
           ? "bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-500"
           : "bg-gradient-to-r from-red-50 to-red-100 border-l-4 border-red-500"
@@ -495,7 +495,7 @@ function MatchCard({
                 src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
                   summonerSpells[participant.summoner1Id]
                 }.png`}
-                alt="Spell 1"
+                alt={`Spell ${participant.summoner1Id}`}
                 fill
                 className="rounded-md shadow-sm"
               />
@@ -505,7 +505,7 @@ function MatchCard({
                 src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
                   summonerSpells[participant.summoner2Id]
                 }.png`}
-                alt="Spell 2"
+                alt={`Spell ${participant.summoner2Id}`}
                 fill
                 className="rounded-md shadow-sm"
               />

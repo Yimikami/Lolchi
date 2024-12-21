@@ -23,6 +23,8 @@ type Participant = {
   teamId: number;
   profileIconId: number;
   summonerId: string;
+  spell1Id: number;
+  spell2Id: number;
 };
 
 type GameData = {
@@ -127,20 +129,33 @@ export default function LiveGamePage({
 
     fetchRanks();
   }, [gameData, region]);
-  console.log(gameData.bannedChampions);
   const blueTeam = gameData.participants.filter((p) => p.teamId === 100);
   const redTeam = gameData.participants.filter((p) => p.teamId === 200);
 
+  const summonerSpells: { [key: number]: string } = {
+    1: "SummonerBoost",
+    3: "SummonerExhaust",
+    4: "SummonerFlash",
+    6: "SummonerHaste",
+    7: "SummonerHeal",
+    11: "SummonerSmite",
+    12: "SummonerTeleport",
+    13: "SummonerMana",
+    14: "SummonerDot",
+    21: "SummonerBarrier",
+    22: "SummonerAssist",
+    30: "SummonerPoroRecall",
+    31: "SummonerPoroThrow",
+    32: "SummonerSnowball",
+    39: "SummonerSnowURFSnowball_Mark",
+    54: "Summoner_UltBookPlaceholder",
+    55: "Summoner_UltBookSmitePlaceholder",
+    2201: "SummonerCherryHold",
+    2202: "SummonerCherryFlash",
+  };
+
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6">
-      <Link
-        href={`/${region}/${summonerName}+${tagLine}`}
-        className="inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-200 font-medium"
-      >
-        <Home size={24} className="mr-2" />
-        Back to Profile
-      </Link>
-
       <Card className="bg-white/95 backdrop-blur-sm shadow-xl rounded-xl border-0">
         <CardHeader className="space-y-2">
           <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
@@ -159,7 +174,9 @@ export default function LiveGamePage({
             </div>
             <div className="flex justify-end items-center">
               <div className="flex items-center gap-3">
-                <p className="text-sm font-medium text-gray-600">Banned Champions:</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Banned Champions:
+                </p>
                 <div className="flex gap-2">
                   {gameData.bannedChampions.map(
                     (ban, index) =>
@@ -185,149 +202,205 @@ export default function LiveGamePage({
       <div className="grid md:grid-cols-2 gap-8">
         <Card className="bg-blue-50/50 backdrop-blur-sm shadow-xl rounded-xl border-0">
           <CardHeader className="border-b border-blue-100/50">
-            <CardTitle className="text-xl font-bold text-blue-900">Blue Team</CardTitle>
+            <CardTitle className="text-xl font-bold text-blue-900">
+              Blue Team
+            </CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-blue-100/50 hover:bg-blue-100/70">
-                  <TableHead className="font-semibold text-blue-900">Summoner</TableHead>
-                  <TableHead className="font-semibold text-blue-900">Rank</TableHead>
-                  <TableHead className="font-semibold text-blue-900">Wins</TableHead>
-                  <TableHead className="font-semibold text-blue-900">Losses</TableHead>
-                  <TableHead className="font-semibold text-blue-900">Win Rate</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {blueTeam.map((participant) => (
-                  <TableRow
-                    key={participant.riotId}
-                    className="hover:bg-blue-100/30 transition-colors duration-200"
-                  >
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <div className="relative group">
+            <div className="grid gap-4">
+              {blueTeam.map((participant) => (
+                <div
+                  key={participant.summonerId}
+                  className="flex items-center justify-between p-2 rounded-lg hover:bg-blue-100/30"
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="flex flex-col gap-1">
+                      <div className="relative w-8 h-8">
+                        <Image
+                          src={`https://cdn.communitydragon.org/14.23.1/champion/${participant.championId}/square`}
+                          alt={`Champion ${participant.championId}`}
+                          fill
+                          className="rounded-md"
+                        />
+                      </div>
+                      <div className="flex">
+                        <div className="relative w-4 h-4">
                           <Image
-                            src={`https://cdn.communitydragon.org/14.23.1/champion/${participant.championId}/square`}
-                            alt={`Champion ${participant.championId}`}
-                            width={48}
-                            height={48}
-                            className="rounded-lg shadow-md transition-transform duration-200 group-hover:scale-110"
+                            src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                              summonerSpells[participant.spell1Id]
+                            }.png`}
+                            alt={`Spell ${participant.spell1Id}`}
+                            fill
+                            className="rounded-sm"
                           />
                         </div>
-                        <Link
-                          href={`/${region}/${
-                            participant.riotId.split("#")[0]
-                          }+${participant.riotId.split("#")[1]}`}
-                          className="font-medium hover:text-blue-600 transition-colors duration-200"
-                        >
-                          {participant.riotId}
-                        </Link>
+                        <div className="relative w-4 h-4">
+                          <Image
+                            src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                              summonerSpells[participant.spell2Id]
+                            }.png`}
+                            alt={`Spell ${participant.spell2Id}`}
+                            fill
+                            className="rounded-sm"
+                          />
+                        </div>
                       </div>
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {ranks[participant.summonerId]?.rank || (
-                        <Loader className="w-4 h-4 animate-spin text-blue-500" />
-                      )}
-                    </TableCell>
-                    <TableCell className="text-green-600 font-medium">
-                      {ranks[participant.summonerId]?.wins !== undefined
-                        ? ranks[participant.summonerId].wins
-                        : 0}
-                    </TableCell>
-                    <TableCell className="text-red-600 font-medium">
-                      {ranks[participant.summonerId]?.losses !== undefined
-                        ? ranks[participant.summonerId].losses
-                        : 0}
-                    </TableCell>
-                    <TableCell
-                      className="font-bold"
-                      style={getWinRateStyle(
-                        ranks[participant.summonerId]?.winRate
-                      )}
-                    >
-                      {ranks[participant.summonerId]?.winRate !== undefined
-                        ? `${ranks[participant.summonerId].winRate}%`
-                        : "0%"}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                    </div>
+                    <div>
+                      <div className="font-medium text-blue-900">
+                        {participant.riotId}
+                      </div>
+                      <div className="text-sm text-blue-700">
+                        {loading ? (
+                          <Loader className="w-4 h-4 animate-spin" />
+                        ) : (
+                          ranks[participant.summonerId]?.rank || "Unranked"
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="text-center">
+                      <div className="text-xs text-gray-600">Wins</div>
+                      <div className="text-green-600 font-medium">
+                        {loading ? (
+                          <Loader className="w-4 h-4 animate-spin" />
+                        ) : (
+                          ranks[participant.summonerId]?.wins || 0
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xs text-gray-600">Losses</div>
+                      <div className="text-red-600 font-medium">
+                        {loading ? (
+                          <Loader className="w-4 h-4 animate-spin" />
+                        ) : (
+                          ranks[participant.summonerId]?.losses || 0
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xs text-gray-600">Win Rate</div>
+                      <div
+                        className="font-medium"
+                        style={getWinRateStyle(
+                          ranks[participant.summonerId]?.winRate || 0
+                        )}
+                      >
+                        {loading ? (
+                          <Loader className="w-4 h-4 animate-spin" />
+                        ) : (
+                          `${ranks[participant.summonerId]?.winRate || 0}%`
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
 
         <Card className="bg-red-50/50 backdrop-blur-sm shadow-xl rounded-xl border-0">
           <CardHeader className="border-b border-red-100/50">
-            <CardTitle className="text-xl font-bold text-red-900">Red Team</CardTitle>
+            <CardTitle className="text-xl font-bold text-red-900">
+              Red Team
+            </CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-red-100/50 hover:bg-red-100/70">
-                  <TableHead className="font-semibold text-red-900">Summoner</TableHead>
-                  <TableHead className="font-semibold text-red-900">Rank</TableHead>
-                  <TableHead className="font-semibold text-red-900">Wins</TableHead>
-                  <TableHead className="font-semibold text-red-900">Losses</TableHead>
-                  <TableHead className="font-semibold text-red-900">Win Rate</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {redTeam.map((participant) => (
-                  <TableRow
-                    key={participant.riotId}
-                    className="hover:bg-red-100/30 transition-colors duration-200"
-                  >
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <div className="relative group">
+            <div className="grid gap-4">
+              {redTeam.map((participant) => (
+                <div
+                  key={participant.summonerId}
+                  className="flex items-center justify-between p-2 rounded-lg hover:bg-red-100/30"
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="flex flex-col gap-1">
+                      <div className="relative w-8 h-8">
+                        <Image
+                          src={`https://cdn.communitydragon.org/14.23.1/champion/${participant.championId}/square`}
+                          alt={`Champion ${participant.championId}`}
+                          fill
+                          className="rounded-md"
+                        />
+                      </div>
+                      <div className="flex">
+                        <div className="relative w-4 h-4">
                           <Image
-                            src={`https://cdn.communitydragon.org/14.23.1/champion/${participant.championId}/square`}
-                            alt={`Champion ${participant.championId}`}
-                            width={48}
-                            height={48}
-                            className="rounded-lg shadow-md transition-transform duration-200 group-hover:scale-110"
+                            src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                              summonerSpells[participant.spell1Id]
+                            }.png`}
+                            alt={`Spell ${participant.spell1Id}`}
+                            fill
+                            className="rounded-sm"
                           />
                         </div>
-                        <Link
-                          href={`/${region}/${
-                            participant.riotId.split("#")[0]
-                          }+${participant.riotId.split("#")[1]}`}
-                          className="font-medium hover:text-red-600 transition-colors duration-200"
-                        >
-                          {participant.riotId}
-                        </Link>
+                        <div className="relative w-4 h-4">
+                          <Image
+                            src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                              summonerSpells[participant.spell2Id]
+                            }.png`}
+                            alt={`Spell ${participant.spell2Id}`}
+                            fill
+                            className="rounded-sm"
+                          />
+                        </div>
                       </div>
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {ranks[participant.summonerId]?.rank || (
-                        <Loader className="w-4 h-4 animate-spin text-red-500" />
-                      )}
-                    </TableCell>
-                    <TableCell className="text-green-600 font-medium">
-                      {ranks[participant.summonerId]?.wins !== undefined
-                        ? ranks[participant.summonerId].wins
-                        : 0}
-                    </TableCell>
-                    <TableCell className="text-red-600 font-medium">
-                      {ranks[participant.summonerId]?.losses !== undefined
-                        ? ranks[participant.summonerId].losses
-                        : 0}
-                    </TableCell>
-                    <TableCell
-                      className="font-bold"
-                      style={getWinRateStyle(
-                        ranks[participant.summonerId]?.winRate
-                      )}
-                    >
-                      {ranks[participant.summonerId]?.winRate !== undefined
-                        ? `${ranks[participant.summonerId].winRate}%`
-                        : "0%"}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                    </div>
+                    <div>
+                      <div className="font-medium text-red-900">
+                        {participant.riotId}
+                      </div>
+                      <div className="text-sm text-red-700">
+                        {loading ? (
+                          <Loader className="w-4 h-4 animate-spin" />
+                        ) : (
+                          ranks[participant.summonerId]?.rank || "Unranked"
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="text-center">
+                      <div className="text-xs text-gray-600">Wins</div>
+                      <div className="text-green-600 font-medium">
+                        {loading ? (
+                          <Loader className="w-4 h-4 animate-spin" />
+                        ) : (
+                          ranks[participant.summonerId]?.wins || 0
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xs text-gray-600">Losses</div>
+                      <div className="text-red-600 font-medium">
+                        {loading ? (
+                          <Loader className="w-4 h-4 animate-spin" />
+                        ) : (
+                          ranks[participant.summonerId]?.losses || 0
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xs text-gray-600">Win Rate</div>
+                      <div
+                        className="font-medium"
+                        style={getWinRateStyle(
+                          ranks[participant.summonerId]?.winRate || 0
+                        )}
+                      >
+                        {loading ? (
+                          <Loader className="w-4 h-4 animate-spin" />
+                        ) : (
+                          `${ranks[participant.summonerId]?.winRate || 0}%`
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>

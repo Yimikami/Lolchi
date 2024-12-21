@@ -1,29 +1,41 @@
 "use client";
 
 import Link from "next/link";
-import { Gamepad, Menu, X } from "lucide-react";
+import { Gamepad, Menu, X, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { HeaderSearchBar } from "@/components/HeaderSearchBar";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isProfilePage =
+    pathname.split("/").length === 3 || pathname.split("/").length === 4;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md">
-      <div className="container mx-auto px-4 h-16">
-        <div className="flex h-full items-center justify-between">
-          <Link
-            href="/"
-            className="flex items-center space-x-2 hover:opacity-90 transition-opacity"
-          >
-            <Gamepad className="h-8 w-8 text-blue-500" />
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
-              Lolchi
-            </span>
-          </Link>
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center gap-4">
+            {/* Logo */}
+            <Link href="/" className="flex items-center space-x-2">
+              <Gamepad className="w-8 h-8 text-blue-500" />
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+                Lolchi
+              </span>
+            </Link>
+          </div>
+
+          {/* Search Bar - Only on Profile Pages */}
+          {isProfilePage && (
+            <div className="hidden md:block w-[500px]">
+              <HeaderSearchBar />
+            </div>
+          )}
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
+          <nav className="hidden md:flex items-center">
             <Button
               asChild
               className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all duration-200"
@@ -34,44 +46,31 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="md:hidden text-gray-500 hover:text-gray-700"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? (
-              <X className="h-6 w-6 text-gray-600" />
-            ) : (
-              <Menu className="h-6 w-6 text-gray-600" />
-            )}
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden border-t border-gray-100 bg-white">
-          <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <Link
-              href="/champions"
-              className="text-gray-600 hover:text-blue-500 transition-colors px-4 py-2 hover:bg-gray-50 rounded-lg"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Champions
-            </Link>
-            <Link
-              href="/leaderboard"
-              className="text-gray-600 hover:text-blue-500 transition-colors px-4 py-2 hover:bg-gray-50 rounded-lg"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Leaderboard
-            </Link>
+          <div className="container mx-auto px-4 py-4 space-y-4">
+            {/* Search Bar - Only on Profile Pages */}
+            {isProfilePage && (
+              <div className="w-full">
+                <HeaderSearchBar />
+              </div>
+            )}
             <Button
               asChild
-              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all duration-200"
-              onClick={() => setIsMenuOpen(false)}
+              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all duration-200"
             >
-              <Link href="/live">Live Games</Link>
+              <Link href="https://github.com/Yimikami/Lolchi">Github Repo</Link>
             </Button>
-          </nav>
+          </div>
         </div>
       )}
     </header>

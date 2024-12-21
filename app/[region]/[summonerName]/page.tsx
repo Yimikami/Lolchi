@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import { SummonerProfile } from "./SummonerProfile";
 import { MatchHistory } from "./MatchHistory";
 import { RecentlyPlayedWith } from "./RecentlyPlayedWith";
+import { ChampionStatistics } from "./ChampionStatistics";
 import { Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -82,13 +83,23 @@ export default async function SummonerPage({
           )}
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <div className="lg:col-span-3 space-y-6">
-              <MatchHistory
-                summonerId={summoner.puuid}
-                region={params.region as any}
-              />
+            <div className="lg:col-span-3">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-1">
+                  <ChampionStatistics
+                    summonerId={summoner.puuid}
+                    region={params.region as any}
+                  />
+                </div>
+                <div className="lg:col-span-2">
+                  <MatchHistory
+                    summonerId={summoner.puuid}
+                    region={params.region as any}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="lg:col-span-1 space-y-6">
+            <div className="lg:col-span-1">
               <RecentlyPlayedWith
                 summonerId={summoner.puuid}
                 region={params.region as any}

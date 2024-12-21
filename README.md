@@ -33,6 +33,10 @@ Welcome to the Lolchi web application! This tool allows you to track your game s
 1. Open your web browser and go to `http://localhost:3000`.
 2. Enter your League of Legends summoner name to start tracking your stats.
 
+## KNOWN ISSUES
+
+- **No Data**: Sometimes (especially when first visit the summoner profile), the data may not be displayed. This is due to the Riot API rate limit. Please wait a few seconds and refresh the page.
+
 ## Contributing
 
 We welcome contributions! Please follow these steps:

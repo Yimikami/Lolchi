@@ -7,6 +7,7 @@ import {
 import { notFound } from "next/navigation";
 import { SummonerProfile } from "./SummonerProfile";
 import { MatchHistory } from "./MatchHistory";
+import { RecentlyPlayedWith } from "./RecentlyPlayedWith";
 import { Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -43,16 +44,19 @@ export default async function SummonerPage({
       console.error("Player is not in a game");
     }
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-        <div className="container mx-auto px-4 py-8 space-y-8">
-          <Link
-            href="/"
-            className="inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-200"
-          >
-            <Home size={24} className="mr-2" />
-            <span className="font-medium">Back to home</span>
-          </Link>
+      <div className="container mx-auto px-4 py-8">
+        <a
+          href="/"
+          className="inline-flex items-center text-gray-500 hover:text-blue-600 transition-all duration-200 mb-6 group"
+        >
+          <Home
+            size={20}
+            className="mr-2 group-hover:-translate-x-1 transition-transform duration-200"
+          />
+          <span className="font-medium">Back to home</span>
+        </a>
 
+        <div className="space-y-6">
           <SummonerProfile
             summoner={summoner}
             rankedInfo={rankedInfo}
@@ -60,31 +64,40 @@ export default async function SummonerPage({
           />
 
           {gameData && (
-            <div className="flex justify-center">
+            <div className="flex justify-start">
               <Button
-                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+                asChild
+                className="bg-gradient-to-r from-red-500 to-red-600 
+                  hover:from-red-600 hover:to-red-700 text-white shadow-md 
+                  hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
               >
-                <Link
-                  href={`/${params.region}/${params.summonerName}/live`}
-                  className="text-white font-medium"
-                >
-                  Live Game
+                <Link href={`/${params.region}/${params.summonerName}/live`}>
+                  <div className="flex items-center gap-2 px-2">
+                    <div className="w-2 h-2 rounded-full bg-white/90 animate-pulse" />
+                    Live Game
+                  </div>
                 </Link>
               </Button>
             </div>
           )}
 
-          <div className="grid grid-cols-1 gap-8">
-            <div className="w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-3 space-y-6">
               <MatchHistory
                 summonerId={summoner.puuid}
                 region={params.region as any}
               />
             </div>
+            <div className="lg:col-span-1 space-y-6">
+              <RecentlyPlayedWith
+                summonerId={summoner.puuid}
+                region={params.region as any}
+              />
+            </div>
           </div>
-
-          <Footer />
         </div>
+
+        <Footer />
       </div>
     );
   } catch (error) {

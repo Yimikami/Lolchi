@@ -198,7 +198,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                       >
                         <div className="relative">
                           <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/${participant.championName}.png`}
+                            src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${participant.championName}.png`}
                             alt={participant.championName}
                             width={48}
                             height={48}
@@ -207,9 +207,10 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                           <span className="absolute top-0 left-0 bg-black text-white text-xs font-bold rounded-full px-1">
                             {participant.champLevel}
                           </span>
+                          <div className="flex justify-center mt-1"></div>
                           <div className="flex justify-center mt-1">
                             <Image
-                              src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/spell/${
+                              src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
                                 summonerSpells[participant.summoner1Id]
                               }.png`}
                               alt={summonerSpells[participant.summoner1Id]}
@@ -218,7 +219,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                               className="mr-1"
                             />
                             <Image
-                              src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/spell/${
+                              src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
                                 summonerSpells[participant.summoner2Id]
                               }.png`}
                               alt={summonerSpells[participant.summoner2Id]}
@@ -257,7 +258,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                             .map((itemId, index) => (
                               <Image
                                 key={index}
-                                src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/${itemId}.png`}
+                                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/item/${itemId}.png`}
                                 alt={`Item ${index + 1}`}
                                 width={24}
                                 height={24}
@@ -279,7 +280,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                       >
                         <div className="relative">
                           <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/${participant.championName}.png`}
+                            src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${participant.championName}.png`}
                             alt={participant.championName}
                             width={48}
                             height={48}
@@ -290,7 +291,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                           </span>
                           <div className="flex justify-center mt-1">
                             <Image
-                              src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/spell/${
+                              src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
                                 summonerSpells[participant.summoner1Id]
                               }.png`}
                               alt={summonerSpells[participant.summoner1Id]}
@@ -299,7 +300,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                               className="mr-1"
                             />
                             <Image
-                              src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/spell/${
+                              src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
                                 summonerSpells[participant.summoner2Id]
                               }.png`}
                               alt={summonerSpells[participant.summoner2Id]}
@@ -338,7 +339,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                             .map((itemId, index) => (
                               <Image
                                 key={index}
-                                src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/${itemId}.png`}
+                                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/item/${itemId}.png`}
                                 alt={`Item ${index + 1}`}
                                 width={24}
                                 height={24}
@@ -357,6 +358,36 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
     </div>
   );
 }
+
+const summonerSpells: { [key: number]: string } = {
+  1: "SummonerBoost",
+  3: "SummonerExhaust",
+  4: "SummonerFlash",
+  6: "SummonerHaste",
+  7: "SummonerHeal",
+  11: "SummonerSmite",
+  12: "SummonerTeleport",
+  13: "SummonerMana",
+  14: "SummonerDot",
+  21: "SummonerBarrier",
+  22: "SummonerAssist",
+  30: "SummonerPoroRecall",
+  31: "SummonerPoroThrow",
+  32: "SummonerSnowball",
+  39: "SummonerSnowURFSnowball_Mark",
+  54: "Summoner_UltBookPlaceholder",
+  55: "Summoner_UltBookSmitePlaceholder",
+  2201: "SummonerCherryHold",
+  2202: "SummonerCherryFlash",
+};
+
+const queueIds: { [key: number]: string } = {
+  "400": "Draft Pick",
+  "420": "Ranked Solo/Duo",
+  "430": "Blind Pick",
+  "440": "Ranked Flex",
+  "450": "ARAM",
+};
 
 function MatchCard({
   match,
@@ -394,13 +425,37 @@ function MatchCard({
       }`}
     >
       <div className="flex items-center gap-4">
-        <div className="relative w-16 h-16">
-          <Image
-            src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/${participant.championName}.png`}
-            alt="Champion"
-            fill
-            className="rounded-lg"
-          />
+        <div className="relative ">
+          <div className="relative w-16 h-16">
+            <Image
+              src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${participant.championName}.png`}
+              alt="Champion"
+              fill
+              className="rounded-lg"
+            />
+          </div>
+          <div className="mt-1 flex  justify-center">
+            <div className="relative w-5 h-5">
+              <Image
+                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                  summonerSpells[participant.summoner1Id]
+                }.png`}
+                alt="Spell 1"
+                fill
+                className="rounded-md"
+              />
+            </div>
+            <div className="relative w-5 h-5">
+              <Image
+                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                  summonerSpells[participant.summoner2Id]
+                }.png`}
+                alt="Spell 2"
+                fill
+                className="rounded-md"
+              />
+            </div>
+          </div>
         </div>
         <div className="flex-1">
           <div className="flex justify-between items-start">
@@ -410,6 +465,9 @@ function MatchCard({
               </p>
               <p className="text-sm text-muted-foreground">
                 {formatDistanceToNow(match.info.gameCreation)} ago
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {queueIds[match.info.queueId] || "Unknown Queue"}
               </p>
             </div>
             <div className="text-right">
@@ -426,7 +484,7 @@ function MatchCard({
                   itemId !== 0 && (
                     <div key={index} className="relative w-8 h-8">
                       <Image
-                        src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/${itemId}.png`}
+                        src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/item/${itemId}.png`}
                         alt="Item"
                         fill
                         className="rounded-md"
@@ -435,9 +493,7 @@ function MatchCard({
                   )
               )}
             </div>
-            <p className="text-sm text-muted-foreground">
-              {cs} CS ({csPerMin}/min)
-            </p>
+            <p className="text-sm text-muted-foreground"></p>
           </div>
         </div>
       </div>

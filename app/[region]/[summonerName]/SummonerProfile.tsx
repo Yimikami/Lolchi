@@ -25,7 +25,7 @@ export function SummonerProfile({
       <div className="flex flex-col md:flex-row items-center gap-6">
         <div className="relative w-32 h-32">
           <Image
-            src={`https://ddragon.leagueoflegends.com/cdn/14.23.1/img/profileicon/${summoner.profileIconId}.png`}
+            src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${summoner.profileIconId}.png`}
             alt="Summoner Icon"
             fill
             className="rounded-full shadow-md"
@@ -33,7 +33,9 @@ export function SummonerProfile({
         </div>
 
         <div className="flex-1">
-          <h1 className="text-4xl font-extrabold mb-2 text-gray-800">{summonerName}</h1>
+          <h1 className="text-4xl font-extrabold mb-2 text-gray-800">
+            {summonerName}
+          </h1>
 
           <p className="text-lg text-gray-600 mb-4">
             Level {summoner.summonerLevel}

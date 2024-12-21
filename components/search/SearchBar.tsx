@@ -17,7 +17,7 @@ const MAX_RECENT_SEARCHES = 10;
 
 export function SearchBar() {
   const router = useRouter();
-  const [region, setRegion] = useState("tr1");
+  const [region, setRegion] = useState("euw1");
   const [summonerName, setSummonerName] = useState("");
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
   const [showRecent, setShowRecent] = useState(false);

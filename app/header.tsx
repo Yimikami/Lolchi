@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Gamepad, Menu, X, ArrowLeft } from "lucide-react";
+import { Gamepad, Menu, X, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { HeaderSearchBar } from "@/components/search/HeaderSearchBar";
@@ -11,7 +11,9 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const isProfilePage =
-    pathname.split("/").length === 3 || pathname.split("/").length === 4;
+    pathname.split("/").length === 3 ||
+    pathname.split("/").length === 4 ||
+    pathname.includes("leaderboards");
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
@@ -35,7 +37,17 @@ export default function Header() {
           )}
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center">
+          <nav className="hidden md:flex items-center gap-4">
+            <Button
+              asChild
+              variant="ghost"
+              className="flex items-center gap-2 hover:bg-blue-50"
+            >
+              <Link href="/leaderboards">
+                <Trophy className="w-4 h-4 text-blue-500" />
+                <span>Leaderboards</span>
+              </Link>
+            </Button>
             <Button
               asChild
               className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all duration-200"
@@ -64,6 +76,17 @@ export default function Header() {
                 <HeaderSearchBar />
               </div>
             )}
+
+            <Button
+              asChild
+              variant="ghost"
+              className="w-full flex items-center justify-center gap-2 hover:bg-blue-50"
+            >
+              <Link href="/leaderboards">
+                <Trophy className="w-4 h-4 text-blue-500" />
+                <span>Leaderboards</span>
+              </Link>
+            </Button>
             <Button
               asChild
               className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all duration-200"

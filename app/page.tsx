@@ -18,7 +18,8 @@ export default function Home() {
             </h1>
           </div>
           <p className="text-xl text-gray-600 max-w-2xl">
-            Track your League of Legends statistics and elevate your gameplay to the next level
+            Track your League of Legends statistics and elevate your gameplay to
+            the next level
           </p>
         </div>
 
@@ -48,7 +49,6 @@ export default function Home() {
           <ChampionRotation region="euw1" />
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

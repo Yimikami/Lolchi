@@ -1,100 +1,151 @@
-# Lolchi
+# 🎮 Lolchi
 
-Welcome to the Lolchi web application! This tool allows you to track your game statistics, analyze performance, and improve your gameplay.
+<div align="center">
 
-## Features
+A modern League of Legends stats tracker built with Next.js 15
 
-- **Real-time Match Tracking**: Get live updates on your ongoing matches.
-- **Detailed Statistics**: View comprehensive stats for each game, including kills, deaths, assists, and more.
-- **Champion Statistics**: Analyze your performance on different champions.
-- **Recently Played With**: See who you've recently played with.
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.2-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.3-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
-## Installation
+</div>
+
+## ✨ Features
+
+### 🎯 Player Statistics
+
+- 📊 Detailed summoner profiles
+- 📜 Match history with comprehensive game details
+- 🏆 Champion statistics and performance metrics
+- 📈 Win rates and ranking information
+
+### 🔴 Live Game Tracking
+
+- 🎥 Real-time game monitoring
+- 👥 Current match participants and their ranks
+- ⚔️ Champion selections and summoner spells
+- 🔔 Live game notifications on leaderboards
+
+### 🏅 Leaderboards
+
+- 🥇 Challenger league rankings
+- 🌍 Region-specific leaderboards
+- 🟢 Live game indicators for top players
+- 📊 Detailed player statistics
+
+### 🎨 Modern UI/UX
+
+- ✨ Clean and responsive design
+- 🌙 Dark mode support
+- 💡 Interactive components with tooltips
+- 🎭 Smooth animations and transitions
+
+## 🚀 Getting Started
+
+### Installation
 
 1. Clone the repository:
+
+```bash
+git clone https://github.com/Yimikami/lolchi.git
+cd lolchi
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+3. Set up environment variables:
+   Create a `.env.local` file in the root directory:
+
+```env
+NEXT_PUBLIC_BASE_URL=your_worker_url_here
+```
+
+4. Start the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser 🎉
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. Fork the repository
+2. Create your feature branch:
    ```bash
-   git clone https://github.com/Yimikami/lolchi.git
+   git checkout -b feature/amazing-feature
    ```
-2. Navigate to the project directory:
+3. Commit your changes:
    ```bash
-   cd lolchi
-   ```
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
-4. Start the application:
-   ```bash
-   npm run dev
-   ```
-
-## Usage
-
-1. Open your web browser and go to `http://localhost:3000`.
-2. Enter your League of Legends summoner name to start tracking your stats.
-
-## KNOWN ISSUES
-
-- **No Data**: Sometimes (especially when first visit the summoner profile), the data may not be displayed. This is due to the Riot API rate limit. Please wait a few seconds and refresh the page.
-
-## Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch:
-   ```bash
-   git checkout -b feature-branch
-   ```
-3. Make your changes and commit them:
-   ```bash
-   git commit -m "Description of your changes"
+   git commit -m '✨ Add some amazing feature'
    ```
 4. Push to the branch:
    ```bash
-   git push origin feature-branch
+   git push origin feature/amazing-feature
    ```
-5. Create a pull request.
+5. Open a Pull Request 🎉
 
-## Deployment on Cloudflare Workers
+## 📄 License
 
-With the introduction of `worker.js`, you can now deploy Lolchi on Cloudflare Workers without the need for a traditional server setup.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## ⚠️ Known Issues
+
+- 🔄 **Missing Data**: Occasionally, data might not load due to Riot API rate limits. With an API key that has higher rate limits, this issue is unlikely to occur.
+
+## ☁️ Deployment on Cloudflare Workers
+
+With the introduction of `worker.js`, you can now use Cloudflare Workers for your Riot API requests!
 
 [Credits to BangingHeads](https://hextechdocs.dev/using-cloudflare-workers-to-make-api-calls/)
 
-If you prefer not to use the Cloudflare Worker script, you can find the old `server.js` and `riot.ts` files in the `OLD_FILES` directory.
+### 🔧 Steps to Deploy
 
-### Steps to Deploy
-
-1. **Set up a Cloudflare Workers account**: If you don't have one, sign up at [Cloudflare](https://www.cloudflare.com/).
+1. **Set up a Cloudflare Workers account**
 2. **Deploy the Worker**:
-   - Use the Cloudflare dashboard or Wrangler CLI to deploy your `worker.js` file.
-   - Ensure your environment variables are set up correctly in the Cloudflare dashboard.
+   - Use the Cloudflare dashboard or Wrangler CLI
+   - Set up your environment variables
 
-For more detailed instructions, refer to the [Cloudflare Workers documentation](https://developers.cloudflare.com/workers/).
-
-### CORS Configuration
-
-For development purposes, you can set `const ALLOWED_ORIGINS = ["*"];` in `worker.js` to allow all origins. However, for production deployment, it's recommended to specify your own domain to enhance security.
+### 🔒 CORS Configuration
 
 ```javascript
-// Example for development
+// Development
 const ALLOWED_ORIGINS = ["*"];
 
-// Example for production
+// Production
 const ALLOWED_ORIGINS = ["https://yourdomain.com"];
 ```
 
-## License
+### 🔑 Riot Games API Key
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+```javascript
+// Your Riot Games API Key
+const API_KEY = "YOUR API KEY";
+```
 
-## Contact
+## 📞 Contact
 
-For any questions or feedback, please contact me at hi@yimikami.me
+Have questions or suggestions? Feel free to:
 
-Enjoy tracking and improving your League of Legends gameplay!
+- 🐛 Open an issue
 
-## Disclaimer
+- 📧 Email me at [hi@yimikami.me](mailto:hi@yimikami.me)
+
+## ⚖️ Disclaimer
 
 This project isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.

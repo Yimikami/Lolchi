@@ -2,16 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Home, Loader } from "lucide-react";
+import { Loader } from "lucide-react";
 import Image from "next/image";
 import { getRankedInfo } from "@/lib/api/riot";
 import { RegionId } from "@/lib/config/regions";
@@ -161,9 +153,11 @@ export default function LiveGamePage({
           <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
             Live Game #{gameData.gameId}
           </CardTitle>
-          <div className="text-lg font-medium text-gray-700">
-            {SummonerName}#{tagLine}'s Game
-          </div>
+          {summonerName && (
+            <div className="text-lg font-medium text-gray-700">
+              {SummonerName}#{tagLine}&apos;s Game
+            </div>
+          )}
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
@@ -183,7 +177,7 @@ export default function LiveGamePage({
                       ban.championId !== -1 && (
                         <div key={index} className="relative group">
                           <Image
-                            src={`https://cdn.communitydragon.org/14.23.1/champion/${ban.championId}/square`}
+                            src={`https://cdn.communitydragon.org/15.2.1/champion/${ban.championId}/square`}
                             alt={`Ban ${ban.championId}`}
                             width={32}
                             height={32}
@@ -217,7 +211,7 @@ export default function LiveGamePage({
                     <div className="flex flex-col gap-1">
                       <div className="relative w-8 h-8">
                         <Image
-                          src={`https://cdn.communitydragon.org/14.23.1/champion/${participant.championId}/square`}
+                          src={`https://cdn.communitydragon.org/15.2.1/champion/${participant.championId}/square`}
                           alt={`Champion ${participant.championId}`}
                           fill
                           className="rounded-md"
@@ -226,7 +220,7 @@ export default function LiveGamePage({
                       <div className="flex">
                         <div className="relative w-4 h-4">
                           <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/spell/${
                               summonerSpells[participant.spell1Id]
                             }.png`}
                             alt={`Spell ${participant.spell1Id}`}
@@ -236,7 +230,7 @@ export default function LiveGamePage({
                         </div>
                         <div className="relative w-4 h-4">
                           <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/spell/${
                               summonerSpells[participant.spell2Id]
                             }.png`}
                             alt={`Spell ${participant.spell2Id}`}
@@ -259,7 +253,10 @@ export default function LiveGamePage({
                         {loading ? (
                           <Loader className="w-4 h-4 animate-spin" />
                         ) : (
-                          ranks[participant.summonerId]?.rank || "Unranked"
+                          ranks[participant.summonerId]?.rank +
+                            " " +
+                            ranks[participant.summonerId]?.lp.toLocaleString() +
+                            " LP" || "Unranked"
                         )}
                       </div>
                     </div>
@@ -324,7 +321,7 @@ export default function LiveGamePage({
                     <div className="flex flex-col gap-1">
                       <div className="relative w-8 h-8">
                         <Image
-                          src={`https://cdn.communitydragon.org/14.23.1/champion/${participant.championId}/square`}
+                          src={`https://cdn.communitydragon.org/15.2.1/champion/${participant.championId}/square`}
                           alt={`Champion ${participant.championId}`}
                           fill
                           className="rounded-md"
@@ -333,7 +330,7 @@ export default function LiveGamePage({
                       <div className="flex">
                         <div className="relative w-4 h-4">
                           <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/spell/${
                               summonerSpells[participant.spell1Id]
                             }.png`}
                             alt={`Spell ${participant.spell1Id}`}
@@ -343,7 +340,7 @@ export default function LiveGamePage({
                         </div>
                         <div className="relative w-4 h-4">
                           <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/spell/${
                               summonerSpells[participant.spell2Id]
                             }.png`}
                             alt={`Spell ${participant.spell2Id}`}
@@ -366,7 +363,10 @@ export default function LiveGamePage({
                         {loading ? (
                           <Loader className="w-4 h-4 animate-spin" />
                         ) : (
-                          ranks[participant.summonerId]?.rank || "Unranked"
+                          ranks[participant.summonerId]?.rank +
+                            " " +
+                            ranks[participant.summonerId]?.lp.toLocaleString() +
+                            " LP" || "Unranked"
                         )}
                       </div>
                     </div>

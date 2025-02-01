@@ -58,7 +58,7 @@ const ChampionRotation: React.FC<ChampionRotationProps> = ({ region }) => {
               >
                 <div className="relative w-16 h-16">
                   <Image
-                    src={`https://cdn.communitydragon.org/14.23.1/champion/${championId}/square`}
+                    src={`https://cdn.communitydragon.org/15.2.1/champion/${championId}/square`}
                     alt={`Champion ${championId}`}
                     fill
                     className="rounded-lg shadow-md group-hover:shadow-lg transition-shadow duration-200"
@@ -81,7 +81,7 @@ const ChampionRotation: React.FC<ChampionRotationProps> = ({ region }) => {
               >
                 <div className="relative w-16 h-16">
                   <Image
-                    src={`https://cdn.communitydragon.org/14.23.1/champion/${championId}/square`}
+                    src={`https://cdn.communitydragon.org/15.2.1/champion/${championId}/square`}
                     alt={`Champion ${championId}`}
                     fill
                     className="rounded-lg shadow-md group-hover:shadow-lg transition-shadow duration-200"

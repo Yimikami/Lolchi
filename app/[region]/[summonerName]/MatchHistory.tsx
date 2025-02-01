@@ -145,14 +145,6 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
     2202: "SummonerCherryFlash",
   };
 
-  const queueIds: { [key: number]: string } = {
-    "400": "Draft Pick",
-    "420": "Ranked Solo/Duo",
-    "430": "Blind Pick",
-    "440": "Ranked Flex",
-    "450": "ARAM",
-  };
-
   return (
     <div className="space-y-4 max-w-5xl mx-auto px-4">
       {loading ? (
@@ -253,7 +245,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                         <div className="relative group">
                           <div className="relative w-16 h-16 transition-transform duration-200 group-hover:scale-105">
                             <Image
-                              src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${participant.championName}.png`}
+                              src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/champion/${participant.championName}.png`}
                               alt="Champion"
                               fill
                               className="rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
@@ -262,7 +254,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                           <div className="mt-1 flex gap-0.5 justify-center">
                             <div className="relative w-6 h-6 transition-transform duration-200 hover:scale-110">
                               <Image
-                                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                                src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/spell/${
                                   summonerSpells[participant.summoner1Id]
                                 }.png`}
                                 alt="Spell 1"
@@ -272,7 +264,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                             </div>
                             <div className="relative w-6 h-6 transition-transform duration-200 hover:scale-110">
                               <Image
-                                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                                src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/spell/${
                                   summonerSpells[participant.summoner2Id]
                                 }.png`}
                                 alt="Spell 2"
@@ -312,7 +304,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                             .map((itemId, index) => (
                               <Image
                                 key={index}
-                                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/item/${itemId}.png`}
+                                src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/item/${itemId}.png`}
                                 alt={`Item ${index + 1}`}
                                 width={24}
                                 height={24}
@@ -335,7 +327,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                         <div className="relative group">
                           <div className="relative w-16 h-16 transition-transform duration-200 group-hover:scale-105">
                             <Image
-                              src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${participant.championName}.png`}
+                              src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/champion/${participant.championName}.png`}
                               alt="Champion"
                               fill
                               className="rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
@@ -344,7 +336,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                           <div className="mt-1 flex gap-0.5 justify-center">
                             <div className="relative w-6 h-6 transition-transform duration-200 hover:scale-110">
                               <Image
-                                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                                src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/spell/${
                                   summonerSpells[participant.summoner1Id]
                                 }.png`}
                                 alt="Spell 1"
@@ -354,7 +346,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                             </div>
                             <div className="relative w-6 h-6 transition-transform duration-200 hover:scale-110">
                               <Image
-                                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                                src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/spell/${
                                   summonerSpells[participant.summoner2Id]
                                 }.png`}
                                 alt="Spell 2"
@@ -394,7 +386,7 @@ export function MatchHistory({ summonerId, region }: MatchHistoryProps) {
                             .map((itemId, index) => (
                               <Image
                                 key={index}
-                                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/item/${itemId}.png`}
+                                src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/item/${itemId}.png`}
                                 alt={`Item ${index + 1}`}
                                 width={24}
                                 height={24}
@@ -442,6 +434,7 @@ const queueIds: { [key: number]: string } = {
   "430": "Blind Pick",
   "440": "Ranked Flex",
   "450": "ARAM",
+  "900": "ARURF",
 };
 
 function MatchCard({
@@ -483,7 +476,7 @@ function MatchCard({
         <div className="relative group">
           <div className="relative w-16 h-16">
             <Image
-              src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${participant.championName}.png`}
+              src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/champion/${participant.championName}.png`}
               alt="Champion"
               fill
               className="rounded-lg shadow-md"
@@ -492,7 +485,7 @@ function MatchCard({
           <div className="mt-1 flex gap-1 justify-center">
             <div className="relative w-6 h-6">
               <Image
-                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/spell/${
                   summonerSpells[participant.summoner1Id]
                 }.png`}
                 alt={`Spell ${participant.summoner1Id}`}
@@ -502,7 +495,7 @@ function MatchCard({
             </div>
             <div className="relative w-6 h-6">
               <Image
-                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/spell/${
+                src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/spell/${
                   summonerSpells[participant.summoner2Id]
                 }.png`}
                 alt={`Spell ${participant.summoner2Id}`}
@@ -546,7 +539,7 @@ function MatchCard({
                       className="relative w-8 h-8 rounded-md overflow-hidden shadow-sm hover:shadow-md transition-shadow"
                     >
                       <Image
-                        src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/item/${itemId}.png`}
+                        src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/item/${itemId}.png`}
                         alt="Item"
                         fill
                         className="rounded-md"

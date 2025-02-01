@@ -9,12 +9,10 @@ export default function NotFound() {
         <h1 className="text-6xl font-extrabold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
           404
         </h1>
-        <h2 className="text-3xl font-bold text-gray-800">
-          Summoner Not Found
-        </h2>
+        <h2 className="text-3xl font-bold text-gray-800">Summoner Not Found</h2>
         <p className="text-lg text-gray-600 max-w-md mx-auto">
-          The summoner you're looking for doesn't exist or there was an error
-          fetching their data.
+          The summoner you&apos;re looking for doesn&apos;t exist or there was
+          an error fetching their data.
         </p>
         <Button
           asChild

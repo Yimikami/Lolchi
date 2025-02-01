@@ -204,7 +204,7 @@ export function ChampionStatistics({
           >
             <div className="relative w-16 h-16">
               <Image
-                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${champion.championId}.png`}
+                src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/champion/${champion.championId}.png`}
                 alt={champion.championId}
                 width={64}
                 height={64}

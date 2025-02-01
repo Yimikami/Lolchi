@@ -21,8 +21,21 @@ export async function getAccountByRiotID(
   return fetchDirect(url);
 }
 
+export async function getAccountByPUUID(platform: Platform, puuid: string) {
+  const url = `${BASE_URL}/account-by-puuid/${platform}/${puuid}`;
+  return fetchDirect(url);
+}
+
 export async function getSummonerByPUUID(region: RegionId, puuid: string) {
   const url = `${BASE_URL}/summoner/${region}/${puuid}`;
+  return fetchDirect(url);
+}
+
+export async function getPUUIDBySummonerId(
+  region: RegionId,
+  summonerId: string
+) {
+  const url = `${BASE_URL}/puuid-by-id/${region}/${summonerId}`;
   return fetchDirect(url);
 }
 
@@ -53,5 +66,10 @@ export async function getMatchDetails(platform: Platform, matchId: string) {
 
 export async function getChampionRotation(region: RegionId) {
   const url = `${BASE_URL}/champion-rotation/${region}`;
+  return fetchDirect(url);
+}
+
+export async function getChallengerLeague(region: RegionId) {
+  const url = `${BASE_URL}/challenger/${region}`;
   return fetchDirect(url);
 }

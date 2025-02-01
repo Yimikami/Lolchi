@@ -14,29 +14,27 @@ import { ProfileNavigation } from "@/components/ProfileNavigation";
 export default async function LivePage({
   params,
 }: {
-  params: { region: RegionId; summonerName: string };
+  params: Promise<{ region: RegionId; summonerName: string }>;
 }) {
   try {
-    const regionConfig = regions.find((r) => r.id === params.region);
+    const region = (await params).region;
+    const regionConfig = regions.find((r) => r.id === region);
     if (!regionConfig) {
-      throw new Error(`Invalid region: ${params.region}`);
+      throw new Error(`Invalid region: ${region}`);
     }
 
-    const [summonerName, tagLine] = params.summonerName.split("%2B");
+    const [summonerName, tagLine] = (await params).summonerName.split("%2B");
     const account = await getAccountByRiotID(
       regionConfig.platform,
       summonerName,
       tagLine
     );
 
-    const SummonerName = decodeURIComponent(params.summonerName).replace(
-      /\+/g,
-      "#"
-    );
+    const SummonerName = decodeURIComponent(summonerName).replace(/\+/g, "#");
 
-    const summoner = await getSummonerByPUUID(params.region, account.puuid);
-    const rankedInfo = await getRankedInfo(params.region, summoner.id);
-    const gameData = await getCurrentGame(params.region, summoner.puuid);
+    const summoner = await getSummonerByPUUID(region, account.puuid);
+    const rankedInfo = await getRankedInfo(region, summoner.id);
+    const gameData = await getCurrentGame(region, summoner.puuid);
 
     if (!gameData) {
       throw new Error("No game data found");
@@ -52,15 +50,15 @@ export default async function LivePage({
           />
 
           <ProfileNavigation
-            region={params.region}
-            summonerName={params.summonerName}
+            region={region}
+            summonerName={summonerName}
             isInGame={true}
           />
 
           <div className="mt-8">
             <LiveGamePage
               gameData={gameData}
-              region={params.region}
+              region={region}
               summonerName={summonerName}
               tagLine={tagLine}
             />

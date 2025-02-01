@@ -25,7 +25,7 @@ export function SummonerProfile({
       <div className="flex flex-col md:flex-row items-center gap-8">
         <div className="relative w-36 h-36 group">
           <Image
-            src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${summoner.profileIconId}.png`}
+            src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/profileicon/${summoner.profileIconId}.png`}
             alt="Summoner Icon"
             fill
             className="rounded-full shadow-lg ring-4 ring-blue-500/20 group-hover:ring-blue-500/40 transition-all duration-300"

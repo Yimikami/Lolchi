@@ -10,8 +10,8 @@ export default function NotInGame() {
           Not In Game
         </h1>
         <p className="text-lg text-gray-600 max-w-md mx-auto">
-          The player you're looking for is not currently in a game or there was an
-          error fetching their data.
+          The player you&apos;re looking for is not currently in a game or there
+          was an error fetching their data.
         </p>
         <Button
           asChild

@@ -15,39 +15,36 @@ import { ProfileNavigation } from "@/components/ProfileNavigation";
 export default async function SummonerPage({
   params,
 }: {
-  params: { region: RegionId; summonerName: string };
+  params: Promise<{ region: RegionId; summonerName: string }>;
 }) {
   try {
-    const regionConfig = regions.find((r) => r.id === params.region);
+    const region = (await params).region;
+
+    const regionConfig = regions.find((r) => r.id === region);
     if (!regionConfig) {
-      throw new Error(`Invalid region: ${params.region}`);
+      throw new Error(`Invalid region: ${region}`);
     }
 
-    const [summonerName, tagLine] = params.summonerName.split("%2B");
+    const [summonerName, tagLine] = (await params).summonerName.split("%2B");
     const account = await getAccountByRiotID(
       regionConfig.platform,
       summonerName,
       tagLine
     );
 
-    const SummonerName = decodeURIComponent(params.summonerName).replace(
-      /\+/g,
-      "#"
-    );
+    const SummonerName = decodeURIComponent(summonerName).replace(/\+/g, "#");
 
-    const summoner = await getSummonerByPUUID(params.region, account.puuid);
-    const rankedInfo = await getRankedInfo(params.region, summoner.id);
+    const summoner = await getSummonerByPUUID(region, account.puuid);
+    const rankedInfo = await getRankedInfo(region, summoner.id);
 
     // Check if player is in game
     let isInGame = false;
     try {
-      const gameData = await getCurrentGame(params.region, summoner.puuid);
+      const gameData = await getCurrentGame(region, summoner.puuid);
       if (gameData) {
         isInGame = true;
       }
-    } catch (error) {
-      console.error("Player is not in a game");
-    }
+    } catch (error) {}
 
     return (
       <div className="container mx-auto px-4 py-8">
@@ -59,8 +56,8 @@ export default async function SummonerPage({
           />
 
           <ProfileNavigation
-            region={params.region}
-            summonerName={params.summonerName}
+            region={region}
+            summonerName={summonerName}
             isInGame={isInGame}
           />
 
@@ -72,21 +69,18 @@ export default async function SummonerPage({
                   <div className="lg:col-span-1">
                     <ChampionStatistics
                       summonerId={summoner.puuid}
-                      region={params.region}
+                      region={region}
                     />
                   </div>
                   <div className="lg:col-span-2">
-                    <MatchHistory
-                      summonerId={summoner.puuid}
-                      region={params.region}
-                    />
+                    <MatchHistory summonerId={summoner.puuid} region={region} />
                   </div>
                 </div>
               </div>
               <div className="lg:col-span-1">
                 <RecentlyPlayedWith
                   summonerId={summoner.puuid}
-                  region={params.region}
+                  region={region}
                 />
               </div>
             </div>

@@ -86,8 +86,6 @@ export default async function SummonerPage({
             </div>
           </div>
         </div>
-
-        <Footer />
       </div>
     );
   } catch (error) {

@@ -180,7 +180,7 @@ export function RecentlyPlayedWith({
           >
             <Avatar className="h-12 w-12 ring-2 ring-offset-2 ring-blue-500/10 group-hover:ring-blue-500/20 transition-all duration-200">
               <AvatarImage
-                src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/profileicon/${player.profileIcon}.png`}
+                src={`https://ddragon.leagueoflegends.com/cdn/15.9.1/img/profileicon/${player.profileIcon}.png`}
                 alt={player.gameName}
                 className="object-cover"
               />
@@ -218,7 +218,7 @@ export function RecentlyPlayedWith({
                   >
                     <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-200">
                       <Image
-                        src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/champion/${champion.championId}.png`}
+                        src={`https://ddragon.leagueoflegends.com/cdn/15.9.1/img/champion/${champion.championId}.png`}
                         alt={champion.championId}
                         width={32}
                         height={32}

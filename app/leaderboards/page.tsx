@@ -326,7 +326,7 @@ export default function LeaderboardsPage() {
                               <Avatar className="h-8 w-8 ring-2 ring-offset-2 ring-blue-500/10">
                                 {player.profileIconId ? (
                                   <AvatarImage
-                                    src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/profileicon/${player.profileIconId}.png`}
+                                    src={`https://ddragon.leagueoflegends.com/cdn/15.9.1/img/profileicon/${player.profileIconId}.png`}
                                     alt={player.gameName || player.summonerName}
                                   />
                                 ) : null}

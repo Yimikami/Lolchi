@@ -177,7 +177,7 @@ export default function LiveGamePage({
                       ban.championId !== -1 && (
                         <div key={index} className="relative group">
                           <Image
-                            src={`https://cdn.communitydragon.org/15.2.1/champion/${ban.championId}/square`}
+                            src={`https://cdn.communitydragon.org/15.9.1/champion/${ban.championId}/square`}
                             alt={`Ban ${ban.championId}`}
                             width={32}
                             height={32}
@@ -211,7 +211,7 @@ export default function LiveGamePage({
                     <div className="flex flex-col gap-1">
                       <div className="relative w-8 h-8">
                         <Image
-                          src={`https://cdn.communitydragon.org/15.2.1/champion/${participant.championId}/square`}
+                          src={`https://cdn.communitydragon.org/15.9.1/champion/${participant.championId}/square`}
                           alt={`Champion ${participant.championId}`}
                           fill
                           className="rounded-md"
@@ -220,7 +220,7 @@ export default function LiveGamePage({
                       <div className="flex">
                         <div className="relative w-4 h-4">
                           <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/spell/${
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.9.1/img/spell/${
                               summonerSpells[participant.spell1Id]
                             }.png`}
                             alt={`Spell ${participant.spell1Id}`}
@@ -230,7 +230,7 @@ export default function LiveGamePage({
                         </div>
                         <div className="relative w-4 h-4">
                           <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/spell/${
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.9.1/img/spell/${
                               summonerSpells[participant.spell2Id]
                             }.png`}
                             alt={`Spell ${participant.spell2Id}`}
@@ -321,7 +321,7 @@ export default function LiveGamePage({
                     <div className="flex flex-col gap-1">
                       <div className="relative w-8 h-8">
                         <Image
-                          src={`https://cdn.communitydragon.org/15.2.1/champion/${participant.championId}/square`}
+                          src={`https://cdn.communitydragon.org/15.9.1/champion/${participant.championId}/square`}
                           alt={`Champion ${participant.championId}`}
                           fill
                           className="rounded-md"
@@ -330,7 +330,7 @@ export default function LiveGamePage({
                       <div className="flex">
                         <div className="relative w-4 h-4">
                           <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/spell/${
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.9.1/img/spell/${
                               summonerSpells[participant.spell1Id]
                             }.png`}
                             alt={`Spell ${participant.spell1Id}`}
@@ -340,7 +340,7 @@ export default function LiveGamePage({
                         </div>
                         <div className="relative w-4 h-4">
                           <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/15.2.1/img/spell/${
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.9.1/img/spell/${
                               summonerSpells[participant.spell2Id]
                             }.png`}
                             alt={`Spell ${participant.spell2Id}`}

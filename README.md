@@ -66,7 +66,7 @@ pnpm install
    Create a `.env.local` file in the root directory:
 
 ```env
-NEXT_PUBLIC_BASE_URL=your_worker_url_here
+NEXT_PUBLIC_API_URL=your_worker_url_here
 ```
 
 4. Start the development server:

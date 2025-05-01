@@ -1,6 +1,6 @@
 import { Platform, RegionId } from "@/lib/config/regions";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL; // Proxy server URL
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL; // Proxy server URL
 
 async function fetchDirect(url: string) {
   const response = await fetch(url);
